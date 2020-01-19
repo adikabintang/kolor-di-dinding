@@ -26,3 +26,5 @@ In GeoDNS approach, each PoP has different IP address. GeoDNS will return the IP
 BGP anycast and GeoDNS can be made hybrid. Read [how Dropbox does this](https://blogs.dropbox.com/tech/2018/10/dropbox-traffic-infrastructure-edge-network/).
 
 Dropbox uses latency-based DNS routing for their CDN [[blogs.dropbox.com](https://blogs.dropbox.com/tech/2020/01/intelligent-dns-based-load-balancing-at-dropbox/)].
+
+TODO: read this: https://arxiv.org/pdf/1810.02978.pdf 
