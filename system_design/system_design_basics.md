@@ -119,6 +119,10 @@ How it works:
 
 - https://stackoverflow.com/questions/1108/how-does-database-indexing-work
 
+Basically, it's like this:
+
+if we do `SELECT * FROM username WHERE name=asu_koe` on a `X` rows table, we do linear search. By indexing the `name` column, SQL server (MySQL or PostgreSQL) create an additional table with column `name` and `location of this row in the disk`. The `name` in the indexing table is sorted. When we search and the table has indices, the SQL can do faster searching algorithm to find the location of the row in the disk in the indexing table.
+
 # Database normalization
 
 TODO
