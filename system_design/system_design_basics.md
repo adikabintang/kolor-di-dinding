@@ -59,13 +59,13 @@ There are a few things noticeable from these 2 methods:
 -  JWT does not seem to have problems with load balancers.
 
 
-# Caching
+## Caching
 
 Some cache tools: redis, memcached
 
 Use case example:
 
-Cache `SELECT * FROM user WHERE id=5234` to redis. The server will look at the redis first. If it does not exist, then it goes to the real DB. Redis placed the cache in RAM and it is a key-value store. So it is much faster than looking up at MySQL put in the HDD.
+Cache `SELECT * FROM user WHERE id=5234` to redis (think like this: the query is the key and the result in the value in a hash table). The server will look at the redis first. If it does not exist, then it goes to the real DB. Redis placed the cache in RAM and it is a key-value store. So it is much faster than looking up at MySQL put in the HDD.
 
 Cache replacement policy [[wikipedia]](https://en.wikipedia.org/wiki/Cache_replacement_policies):
 
@@ -75,7 +75,24 @@ Cache control validation (max age, `no-cache`, etc) [[developer.google.com](http
 
 Caching HTML page can be done anywhere from the browser to the server.
 
-# Database replication
+More articles to read and note: https://www.lecloud.net/post/9246290032/scalability-for-dummies-part-3-cache
+
+Two common ways to cache the DB:
+- Commonly used way: caching the query and the result of the query, like the example above
+- Instead of caching the DB query, application that makes the query cache the whole object that it builds. For example:
+A class `Employee` with `name`, `address`, `phone_number` has its members filled by querying  different queries to 3 different tables. Instead of querying the DB query with the result, cache this whole object of the instantiated class.
+
+Examples of things that are commonly cached:
+- User session
+- Static HTML
+- Activity streams
+- user<->friend relationships
+
+Redis: more features.
+
+Memcached: scales better.
+
+## Database replication
 
 Database replication aims to provide availability.
 
@@ -84,7 +101,7 @@ Read:
 - https://www.brianstorti.com/replication/
 - https://www.geeksforgeeks.org/data-replication-in-dbms/
 
-# Database table partitioning
+## Database table partitioning
 
 Read:
 
@@ -104,7 +121,7 @@ The horizontal scaling is useful to optimize data that is accessed with unbalanc
 
 A table of `z` rows is divided into smaller tables with the same column but smaller number of rows. For example, a table of `z` columns and 1000 rows is divided into 10 tables, 100 rows each.
 
-# Database indexing
+## Database indexing
 
 What it is:
 
@@ -123,7 +140,17 @@ Basically, it's like this:
 
 if we do `SELECT * FROM username WHERE name=asu_koe` on a `X` rows table, we do linear search. By indexing the `name` column, SQL server (MySQL or PostgreSQL) create an additional table with column `name` and `location of this row in the disk`. The `name` in the indexing table is sorted. When we search and the table has indices, the SQL can do faster searching algorithm to find the location of the row in the disk in the indexing table.
 
-# Database normalization
+## Database normalization
 
 TODO
 
+## More database tips
+
+Article: https://www.lecloud.net/post/7994751381/scalability-for-dummies-part-2-database
+
+- Database sharding [TODO]
+- No `JOIN` in SQL (use MySQL like NoSQL). Joining is done in the application code
+
+# Asynchronism
+
+If we are working on blocking task, make it asynchronous. For example, in microservices, we can use Kafka or NATS for this purpose.
