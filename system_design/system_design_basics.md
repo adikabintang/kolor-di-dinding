@@ -16,6 +16,8 @@
   - [Consistency pattern](#consistency-pattern)
   - [Availability patterns](#availability-patterns)
     - [Availability in parallel vs sequence](#availability-in-parallel-vs-sequence)
+- [DNS](#dns)
+- [Contenct Delivery Network (CDN)](#contenct-delivery-network-cdn)
 
 Source of my learning: https://github.com/donnemartin/system-design-primer
 
@@ -245,4 +247,21 @@ If a system has multiple components, the availability of each component may or m
 
 2 components in parallel, does not depend on one another, have 99% availability each. The total if the availability is still 99% -> `1 − (1 − 0.99) × (1−0.99) = 99%`.
 
-next: https://github.com/donnemartin/system-design-primer#domain-name-system
+# DNS
+
+...
+
+# Contenct Delivery Network (CDN)
+
+- Push CDN: Content server actively pushes contents to the CDN.
+  - Advantage: the client traffic can go directly to the CDN for the available contents. As a result, less traffic
+  - Disadvantage: not disk efficient. It doesn't care if the contents will be asked by the client, just push them to the CDN.
+  - Suitable for smaller system, less updated contents.
+- Pull CDN: Will put the contents to CDN after a client requests them.
+  - Advantage: disk efficient. Put contents to CDN just if someone asks.
+  - Disadvantage: more traffic to the content server.
+  - Suitable for larger system, frequently updated contents.
+
+
+OOOOIIIIII
+next: https://github.com/donnemartin/system-design-primer#database
