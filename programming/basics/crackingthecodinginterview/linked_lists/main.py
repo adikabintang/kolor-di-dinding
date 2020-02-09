@@ -30,25 +30,15 @@ class LinkedList:
     def remove_duplicate_n(self):
         current = self.head
         counter = {}
+        before = current
         while current:
             if current.val in counter:
-                counter[current.val] += 1
+                before.next_node = current.next_node
             else:
                 counter[current.val] = 1
-                
-            current = current.next_node
-        
-        current = self.head.next_node
-        before = self.head
-        while current:
-            if counter[current.val] > 1:
-                before.next_node = current.next_node
-                counter[current.val] -= 1
-                current = None
-                current = before.next_node
-            else:
                 before = current
-                current = current.next_node
+            
+            current = current.next_node
 
     def print_all(self):
         current = self.head
