@@ -18,7 +18,7 @@ void remove_duplicate(node *head)
     
     while (current != NULL) {
         iterator = head;
-            
+        counter = 0;    
         while (iterator != NULL) {
             if (iterator->val == current->val) {
                 counter++;
@@ -33,42 +33,65 @@ void remove_duplicate(node *head)
             before = iterator;
             iterator = iterator->next;
         }
-        counter = 0;
+        
         current = current->next;
     }
 }
 
-int main()
+void print_ll(node *head)
 {
-    node *head = (node *) malloc(sizeof(node));
-    head->val = 9;
-    head->next = NULL;
-
-    node *a = (node *) malloc(sizeof(node));
-    a->val = 9;
-    a->next = NULL;
-
-    node *b = (node *) malloc(sizeof(node));
-    b->val = 9;
-    b->next = NULL;
-
-    head->next = a;
-    a->next = b;
-
     node *current = head;
     while (current != NULL) {
         printf("%d\n", current->val);
         current = current->next;
     }
+}
 
-    remove_duplicate(head);
-    printf("---\n");
+node *reverse_ll(node *head)
+{
+    node *current = head;
+    node *prev = NULL;
+    node *next = current->next;
 
-    current = head;
-    while (current != NULL) {
-        printf("%d\n", current->val);
-        current = current->next;
+    while (next != NULL) {
+        current->next = prev;
+        prev = current;
+        current = next;
+        next = next->next;
     }
 
+    current->next = prev;
+    return current;
+}
+
+int main()
+{
+    node *head = (node *) malloc(sizeof(node));
+    head->val = 1;
+    head->next = NULL;
+
+    node *a = (node *) malloc(sizeof(node));
+    a->val = 2;
+    a->next = NULL;
+
+    node *b = (node *) malloc(sizeof(node));
+    b->val = 3;
+    b->next = NULL;
+
+    node *c = (node *) malloc(sizeof(node));
+    c->val = 4;
+    c->next = NULL;
+
+    head->next = a;
+    a->next = b;
+    b->next = c;
+
+    print_ll(head);
+
+    //remove_duplicate(head);
+    node *new_head = reverse_ll(head);
+    printf("---\n");
+
+    print_ll(new_head);
     return 0;
 }

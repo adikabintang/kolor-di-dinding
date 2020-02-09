@@ -39,6 +39,20 @@ class LinkedList:
                 before = current
             
             current = current.next_node
+    
+    def reverse(self):
+        current = self.head
+        next_node = current.next_node
+        prev_node = None
+
+        while next_node:
+            current.next_node = prev_node
+            prev_node = current
+            current = next_node
+            next_node = next_node.next_node
+        
+        current.next_node = prev_node
+        self.head = current
 
     def print_all(self):
         current = self.head
@@ -47,7 +61,7 @@ class LinkedList:
             current = current.next_node
 
 head = Node(9)
-a = Node(9)
+a = Node(10)
 b = Node(7)
 c = Node(9)
 
@@ -58,6 +72,7 @@ b.next_node = c
 l = LinkedList(head)
 l.print_all()
 # l.remove_duplicate_n2()
-l.remove_duplicate_n()
+# l.remove_duplicate_n()
+l.reverse()
 print("---")
 l.print_all()
