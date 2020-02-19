@@ -18,6 +18,8 @@
     - [Availability in parallel vs sequence](#availability-in-parallel-vs-sequence)
 - [DNS](#dns)
 - [Contenct Delivery Network (CDN)](#contenct-delivery-network-cdn)
+- [Database](#database)
+- [NoSQL](#nosql)
 
 Source of my learning: https://github.com/donnemartin/system-design-primer
 
@@ -259,9 +261,68 @@ If a system has multiple components, the availability of each component may or m
   - Suitable for smaller system, less updated contents.
 - Pull CDN: Will put the contents to CDN after a client requests them.
   - Advantage: disk efficient. Put contents to CDN just if someone asks.
-  - Disadvantage: more traffic to the content server.
+  - Disadvantage: more traffic **to** the content server.
   - Suitable for larger system, frequently updated contents.
 
+# Database
 
-OOOOIIIIII
-next: https://github.com/donnemartin/system-design-primer#database
+Link: https://github.com/donnemartin/system-design-primer#database
+
+Relational database transactions must have ACID properties:
+
+- Atomicity
+- Consistency
+- Isolation
+- Durability
+
+Techniques to scale relational database:
+
+- master-slave replication [[link](https://github.com/donnemartin/system-design-primer#master-slave-replication)]
+  - Write only to master, can read from both master or slave
+- master-master replication [[link](https://github.com/donnemartin/system-design-primer#master-master-replication)]
+  - Write and read can be done to all master (there is no slave)
+- federation [[link](https://github.com/donnemartin/system-design-primer#federation)]
+  - Splitting DB by function instead of having a monolithic DB. For example: the DB is splitted to user DB, product DB, etc.
+- sharding [[link](https://github.com/donnemartin/system-design-primer#sharding)]
+  - Distributing data across different databases. For example, there is a load balancer in front of 4 DB to split users by their first letter of their name: user A-C, D-F, G-I, X-Y.
+- denormalization [[link](https://github.com/donnemartin/system-design-primer#denormalization)]
+  - Making `read` faster by avoiding `JOIN`. The way is to add duplicate data from other tables to another. This way, no `JOIN` is possible. Only makes sense for a system much more `read` than `write`. 
+- SQL tuning [[link](https://github.com/donnemartin/system-design-primer#sql-tuning)]
+  - use `CHAR` instead of `VARCHAR`
+  - use `TEXT` for big texts such as blog posts
+  - `INT` for integers up to 2^32 or 4 billion
+  - `DECIMAL` for money
+  - avoid storing large `BLOBS`. Instead, store the location of these objects
+  - set `NOT NULL` constraint where applicable
+  - use database indexing
+  - avoid `JOIN` for faster reading (denormalize)
+
+# NoSQL
+
+https://github.com/donnemartin/system-design-primer#nosql
+
+Unlike relational database, NoSQL has BASE properties:
+
+- Basically available
+- Soft state
+- Eventual consistency
+
+Types of NoSQL:
+
+- Key-value store
+  - Abstraction: hash table
+  - Example: redis, memcached
+- Document store
+  - Abstraction: Key-value store with documents such as JSON or XML as values
+  - The documents' formats, as values' formats, are understood by the DB, so that it can do query on the documents
+  - Example: MongoDB, CouchDB, Elasticsearch
+- Wide column store
+  - TODO: read more and experiment since this is new to me and I don't really understand
+  - Example: Cassandra
+- Graph database
+  - TODO: read more and experiment since this is new to me and I don't really understand
+  - Example: Neo4j
+
+Considerations for SQL vs NoSQL: https://github.com/donnemartin/system-design-primer#sql-or-nosql
+
+Next: https://github.com/donnemartin/system-design-primer#cache
