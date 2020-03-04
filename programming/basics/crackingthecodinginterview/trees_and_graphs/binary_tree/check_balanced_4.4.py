@@ -8,17 +8,23 @@ class BinaryTree:
     def __init__(self):
         self.root = None
     
+    def get_height(self, n):
+        if n is None:
+            return -1
+        
+        return max(self.get_height(n.left), self.get_height(n.right)) + 1
+    
     def check_balance(self):
-        s = self.__set_depth(self.root)
+        s = self.__get_depths_as_set(self.root)
         return True if len(s) <= 2 else False
     
-    def __set_depth(self, node_n, depth=0, depth_set=None):
+    def __get_depths_as_set(self, node_n, depth=0, depth_set=None):
         if depth_set is None:
             depth_set = set()
         
         if node_n:
-            depth_set = self.__set_depth(node_n.left, depth+1, depth_set)
-            depth_set = self.__set_depth(node_n.right, depth+1, depth_set)
+            depth_set = self.__get_depths_as_set(node_n.left, depth+1, depth_set)
+            depth_set = self.__get_depths_as_set(node_n.right, depth+1, depth_set)
             return depth_set
         else:
             depth -= 1

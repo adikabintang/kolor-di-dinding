@@ -20,6 +20,8 @@
 - [Contenct Delivery Network (CDN)](#contenct-delivery-network-cdn)
 - [Database](#database)
 - [NoSQL](#nosql)
+- [Cache](#cache)
+- [Asynchronism](#asynchronism-1)
 
 Source of my learning: https://github.com/donnemartin/system-design-primer
 
@@ -325,4 +327,30 @@ Types of NoSQL:
 
 Considerations for SQL vs NoSQL: https://github.com/donnemartin/system-design-primer#sql-or-nosql
 
-Next: https://github.com/donnemartin/system-design-primer#cache
+# Cache
+
+General categories of cache:
+
+- database queries
+- objects:
+  - serializable objects
+  - html
+  - user session
+  - activity streams
+  - user graph data
+
+Avoid file-based caching (hard to scale).
+
+Patterns:
+
+- cache aside: client read->backend->(check cache, if not found, go to DB)->DB
+- write through: client write->backend->write to cache->write to DB (result: cache always have data. faster reading, slower writing)
+- write-behind (write-back): see [this](https://github.com/donnemartin/system-design-primer#write-behind-write-back)
+- refresh-ahead: see [this](https://github.com/donnemartin/system-design-primer#refresh-ahead)
+
+# Asynchronism
+
+https://github.com/donnemartin/system-design-primer#asynchronism
+
+Very good article about backpressure: https://medium.com/@jayphelps/backpressure-explained-the-flow-of-data-through-software-2350b3e77ce7
+
