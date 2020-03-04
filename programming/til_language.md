@@ -2,6 +2,23 @@
 
 # Python
 
+#### Empty array as default parameter
+
+In Python, don't set the default parameter as an empty array because it is an undefined behavior [[link]](https://stackoverflow.com/questions/366422/what-is-the-pythonic-way-to-avoid-default-parameters-that-are-empty-lists). For example, DON'T DO THIS:
+
+```python
+def a_function(some_list = []):
+    pass
+```
+
+Instead, use like this:
+
+```python
+def a_function(some_list = None):
+    if some_list is None:
+        some_list = []
+```
+
 # Java
 
 #### StringBuilder
