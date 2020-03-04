@@ -11,7 +11,7 @@ def a_function(some_list = []):
     pass
 ```
 
-Instead, use like this:
+Instead, do it like this:
 
 ```python
 def a_function(some_list = None):
