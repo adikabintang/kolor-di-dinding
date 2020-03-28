@@ -11,7 +11,7 @@ class Solution:
     def is_offlimit(self, row, column) -> bool:
         return (row, column) in self.__forbidden_points
     
-    def find_path(self, start_row, start_column, end_row, end_column) -> bool:
+    def find_path(self, start_row, start_column, end_row, end_column) -> (set, bool):
         if start_row == end_row and start_column == end_column:
             return [(start_row, start_column)], True
         
