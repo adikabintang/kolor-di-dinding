@@ -12,22 +12,22 @@ class Graph:
         self.nodes = nodes
         self.visited_nodes = {}
 
-    def dfs(self, a_node):
-        if a_node:
-            print(a_node.name)
-            self.visited_nodes[a_node.name] = True
-            for n in a_node.children:
+    def dfs(self, root):
+        if root:
+            print(root.name) # visit
+            self.visited_nodes[root.name] = True
+            for n in root.children:
                 if self.visited_nodes.get(n.name) == None:
                     self.dfs(n)     
     
-    def bfs(self, a_node):
+    def bfs(self, root):
         queue = []
-        self.visited_nodes[a_node.name] = True
-        queue.append(a_node)
+        self.visited_nodes[root.name] = True
+        queue.append(root)
 
         while queue:
             parent = queue.pop(0)
-            print(parent.name)
+            print(parent.name) # visit
             for child in parent.children:
                 if self.visited_nodes.get(child.name) == None:
                     self.visited_nodes[child.name] = True
