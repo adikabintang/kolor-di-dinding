@@ -1,15 +1,15 @@
 class Node:
-    def __init__(self, name=None, children=[]):
+    def __init__(self, name=None, children=None):
         self.name = name
-        self.children = children
+        self.children = children if children else []
 
     def __repr__(self):
         return str(str(self.name) + ": " + str(self.children))
 
 
 class Graph:
-    def __init__(self, nodes=[]):
-        self.nodes = nodes
+    def __init__(self, nodes=None):
+        self.nodes = nodes if nodes else []
         self.visited_nodes = {}
 
     def dfs(self, root):

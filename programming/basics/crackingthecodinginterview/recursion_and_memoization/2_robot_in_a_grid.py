@@ -6,7 +6,7 @@
 class Solution:
     def __init__(self):
         self.paths = []
-        self.__forbidden_points = set([(1, 0)])
+        self.__forbidden_points = set([(2, 2)])
 
     def is_offlimit(self, row, column) -> bool:
         return (row, column) in self.__forbidden_points
@@ -35,8 +35,8 @@ class Solution:
         return path, res
 
 s = Solution()
-# print(s.find_path(0, 0, 2, 3))
+print(s.find_path(0, 0, 2, 3))
 
 # print(find_path(0, 0, 1, 1))
 # print(find_path(0, 0, 1, 2))
-print(s.find_path(0, 0, 100, 5))
+# print(s.find_path(0, 0, 100, 5))

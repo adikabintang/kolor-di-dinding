@@ -1,11 +1,15 @@
 # Google
 
+Collection: https://leetcode.com/discuss/interview-question/352460/Google-Online-Assessment-Questions
+
 ## Phone interview level
 
 - https://leetcode.com/problems/longest-substring-without-repeating-characters/
 - https://leetcode.com/problems/move-zeroes/
 - https://leetcode.com/problems/guess-the-word/
 - https://leetcode.com/discuss/interview-question/302164/google-phone-screen-monarchy
+- https://leetcode.com/problems/find-all-duplicates-in-an-array/
+- https://leetcode.com/problems/divide-array-in-sets-of-k-consecutive-numbers/
 
 ## On site level
 
@@ -25,6 +29,8 @@
 - https://leetcode.com/discuss/interview-question/311662/
 - https://leetcode.com/problems/confusing-number-ii/
 - https://leetcode.com/problems/largest-rectangle-in-histogram/
+- https://leetcode.com/problems/unique-paths-ii/
+- https://leetcode.com/problems/knight-dialer/
 
 # Amazon
 
@@ -37,6 +43,8 @@ Amazon's collection: https://leetcode.com/discuss/interview-question/344650/Amaz
 - https://leetcode.com/problems/find-all-anagrams-in-a-string/
 - https://leetcode.com/problems/merge-two-sorted-lists/
 - https://leetcode.com/problems/symmetric-tree/
+- https://leetcode.com/discuss/interview-question/411357/
+- https://leetcode.com/discuss/interview-question/460127/
 
 ## On site level
 
@@ -69,6 +77,8 @@ Amazon's collection: https://leetcode.com/discuss/interview-question/344650/Amaz
 - https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/
 - https://leetcode.com/problems/basic-calculator-ii/
 - https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+- https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/
+- https://leetcode.com/problems/subarray-sum-equals-k/
 
 ## On site level
 
@@ -95,6 +105,10 @@ Amazon's collection: https://leetcode.com/discuss/interview-question/344650/Amaz
 - https://leetcode.com/problems/read-n-characters-given-read4
 - https://leetcode.com/problems/remove-invalid-parentheses
 - https://leetcode.com/problems/backspace-string-compare
+
+# Microsoft
+
+https://leetcode.com/discuss/interview-question/398023/Microsoft-Online-Assessment-Questions
 
 # Grab
 
