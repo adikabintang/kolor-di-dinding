@@ -74,7 +74,13 @@ ArrayList<type> arr;
 
 # Set
 
+- add, remove, iterate
+- list to set and vice versa
+- get the only element in list
+
 # Hash Table
+
+- add, remove, iterate
 
 
 # Bit Vector
@@ -106,3 +112,5 @@ String parts[] = string.splits(delimiter)
 ## Join array/list of chars to string
 
 ## Strstr
+
+# Map, reduce, zip
