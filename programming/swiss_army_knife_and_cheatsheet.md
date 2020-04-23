@@ -44,6 +44,9 @@ No built-in dynamic array. There is a static-sized array.
 ```cpp
 std::vector<type> arr;
 
+arr.push_back(val);
+auto x = arr.at(i);
+
 for (int i = 0; i < arr.size(); i++) {
     visit_or_manipulate(arr.at(i));
 }
@@ -243,12 +246,110 @@ array = string.split(delimiters)
 char *p = strtok(string, delimiter)
 ```
 
+### C++
+
+Oh man....
+
+https://www.fluentcpp.com/2017/04/21/how-to-split-a-string-in-c/
+
+```cpp
+std::vector<std::string> split(const std::string& s, char delimiter)
+{
+   std::vector<std::string> tokens;
+   std::string token;
+   std::istringstream tokenStream(s);
+   while (std::getline(tokenStream, token, delimiter))
+   {
+      tokens.push_back(token);
+   }
+   return tokens;
+}
+```
+
 ## Check if string is alphabet/numeric/alphanumeric
 
+### Python
+
+```python
+s = "asdasd"
+s.isalnum()
+s.isalpha()
+s.isnumeric()
+```
+
+### C++
+
+```cpp
+#include <cctype>
+#include <algorithm>
+
+// there are also 
+// std::isalpha(char) and std::isdigit(char)
+bool my_is_alnum(std::string &s) {
+    return std::find_if(s.begin(), s.end(), 
+        [](char c){ return std::is_alnum(c); });
+}
+```
+
 ## Join array/list of chars to string
+
+### Python
+
+```python
+arr = ["a", "sd"]
+separator = "."
+res = separator.join(arr)
+```
+
+### C++
+
+```cpp
+```
 
 ## String replace
 
 ## Strstr
 
-# Map, reduce, zip
+# Map and Filter
+
+### Python
+
+https://www.python-course.eu/python3_lambda.php
+
+```python
+arr = [1, 2, 3, 4]
+list(map(lambda x: x * 2, arr)) # [2, 4, 6, 8]
+
+# filter out arr element if that element % 2 == true
+list(filter(lambda x: x % 2, arr)) #[1, 3]
+```
+
+### C++
+
+https://stackoverflow.com/questions/40901615/how-to-replicate-map-filter-and-reduce-behaviors-in-c-using-stl
+
+```cpp
+std::vector<int> nums{1, 2, 3, 4, 5, 6};
+std::vector<int> result;
+
+// std::transform = map
+// if we want the result to be in "nums" too (in-place),
+// put nums.begin() instead of std::back_inserter(result) as 
+// the 3rd parameter
+std::transform(nums.begin(), nums.end(), std::back_inserter(result),
+    [](int x) {return x * 2; });
+
+for (int i = 0; i < nums.size(); i++) {
+    std::cout << result.at(i) << std::endl;
+}
+
+std::vector<int> result_copy;
+
+// std::copy_if = filter
+std::copy_if(nums.begin(), nums.end(), std::back_inserter(result_copy),
+    [](int x){ return x % 2; });
+
+for (int i = 0; i < result_copy.size(); i++) {
+    std::cout << result_copy.at(i) << std::endl;
+}
+```
