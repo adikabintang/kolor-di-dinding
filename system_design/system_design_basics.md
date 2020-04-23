@@ -3,6 +3,7 @@
   - [Load balancing](#load-balancing)
     - [Methods for load balancing](#methods-for-load-balancing)
     - [Problem: stateful app on top of stateless protocol (HTTP)](#problem-stateful-app-on-top-of-stateless-protocol-http)
+  - [Consistent hash](#consistent-hash)
   - [Caching](#caching)
   - [Database replication](#database-replication)
   - [Database table partitioning](#database-table-partitioning)
@@ -22,6 +23,10 @@
 - [NoSQL](#nosql)
 - [Cache](#cache)
 - [Asynchronism](#asynchronism-1)
+- [Message Queue](#message-queue)
+- [How to design API](#how-to-design-api)
+- [Event Driven System](#event-driven-system)
+- [Consensus and data replication strategies](#consensus-and-data-replication-strategies)
 
 Source of my learning: https://github.com/donnemartin/system-design-primer
 
@@ -83,6 +88,11 @@ There are a few things noticeable from these 2 methods:
   -  Another session cookie is given by the load balancer, and the load balancer must remember the session must correspond to which backend service [[haproxy](https://www.haproxy.com/blog/load-balancing-affinity-persistence-sticky-sessions-what-you-need-to-know/)]. Let's say, there are 2 servers behind a load balancer. The load balancer will return session id 1 if the client signs in to server ip A, and it will return session id 2 if it signs in to server ip B. The load balancer will match the session 1 or 2 and redirects the traffic to the server accordingly.
 -  JWT does not seem to have problems with load balancers.
 
+## Consistent hash
+
+https://www.toptal.com/big-data/consistent-hashing
+
+https://www.youtube.com/watch?v=zaRkONvyGr8&list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX&index=5
 
 ## Caching
 
@@ -163,7 +173,7 @@ How it works:
 
 Basically, it's like this:
 
-if we do `SELECT * FROM username WHERE name=asu_koe` on a `X` rows table, we do linear search. By indexing the `name` column, SQL server (MySQL or PostgreSQL) create an additional table with column `name` and `location of this row in the disk`. The `name` in the indexing table is sorted. When we search and the table has indices, the SQL can do faster searching algorithm to find the location of the row in the disk in the indexing table.
+if we do `SELECT * FROM username WHERE name=asu_koe` on a `X` rows table, we do a linear search. By indexing the `name` column, SQL server (MySQL or PostgreSQL) create an additional table with column `name` and `location of this row in the disk`. The `name` in the indexing table is sorted. When we search and the table has indices, the SQL can do faster searching algorithm to find the location of the row in the disk in the indexing table.
 
 ## Database normalization and denormalization
 
@@ -353,4 +363,39 @@ Patterns:
 https://github.com/donnemartin/system-design-primer#asynchronism
 
 Very good article about backpressure: https://medium.com/@jayphelps/backpressure-explained-the-flow-of-data-through-software-2350b3e77ce7
+
+# Message Queue
+
+https://www.youtube.com/watch?v=oUJbuFMyBDk&list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX&index=7&t=0s
+
+Keyword to understand:
+
+- Notifier: when worker(s) down, it notifies the other
+- Load balancer: load balancing load for workers, avoid duplication
+- Heart beat: checking if workers are alive
+
+# How to design API
+
+Sources:
+
+- https://www.youtube.com/watch?v=_YlYuNMTCc8&list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX&index=12
+- ...
+
+1. Be consistent in naming: if the name says it returns admin, return only admin and nothing else
+2. Define parameters API should receive
+3. Define what objects API should return
+4. Define errors
+5. Path should be noun. Let the HTTP methods (GET, POST, PUT, PATCH, DELETE) do their job.
+6. Don't introduce side effects: make sure every function does one job and does atomic operations
+7. Long response? use pagination or fragmentation
+8. Think about consistency: what if we have a cache and th data is stale?
+
+# Event Driven System
+
+https://www.youtukbe.com/watch?v=rJHTK2TfZ1I&list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX&index=20
+
+# Consensus and data replication strategies
+
+source: https://www.youtube.com/watch?v=GeGxgmPTe4c&list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX&index=18&t=0s
+
 

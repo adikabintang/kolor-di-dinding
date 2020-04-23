@@ -1,3 +1,4 @@
+# https://leetcode.com/problems/implement-strstr/
 # Runtime: 20 ms, faster than 97.94% of Python3 online submissions 
 # Memory Usage: 12.9 MB, less than 100.00% of Python3 online submissions
 def strStr(haystack: str, needle: str):

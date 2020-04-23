@@ -71,9 +71,9 @@ Amazon's collection: https://leetcode.com/discuss/interview-question/344650/Amaz
 
 ## Phone interview level
 
-- https://leetcode.com/problems/copy-list-with-random-pointer/
-- https://leetcode.com/problems/merge-intervals
-- https://leetcode.com/problems/next-permutation/
+- https://leetcode.com/problems/copy-list-with-random-pointer/ **DONE**
+- https://leetcode.com/problems/merge-intervals **DONE**
+- https://leetcode.com/problems/next-permutation/ -> skip
 - https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/
 - https://leetcode.com/problems/basic-calculator-ii/
 - https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
@@ -105,10 +105,17 @@ Amazon's collection: https://leetcode.com/discuss/interview-question/344650/Amaz
 - https://leetcode.com/problems/read-n-characters-given-read4
 - https://leetcode.com/problems/remove-invalid-parentheses
 - https://leetcode.com/problems/backspace-string-compare
+- https://www.geeksforgeeks.org/find-index-maximum-occurring-element-equal-probability/
+- https://leetcode.com/problems/range-sum-of-bst/
+- https://www.geeksforgeeks.org/find-closest-element-binary-search-tree/
+- https://leetcode.com/problems/insert-delete-getrandom-o1/
 
 # Microsoft
 
-https://leetcode.com/discuss/interview-question/398023/Microsoft-Online-Assessment-Questions
+- https://leetcode.com/discuss/interview-question/398023/Microsoft-Online-Assessment-Questions
+- https://leetcode.com/problems/two-sum-iv-input-is-a-bst/
+- https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
+
 
 # Grab
 
