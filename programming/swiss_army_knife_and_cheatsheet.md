@@ -308,7 +308,65 @@ res = separator.join(arr)
 
 ## String replace
 
-## Strstr
+### Python
+
+```python
+s = "oh man what is this man"
+s.replace("man", "boi")
+# s = "oh boi what is this boi"
+```
+
+### C++
+
+https://stackoverflow.com/questions/3418231/replace-part-of-a-string-with-another-string
+
+```cpp
+std::string haystack = "oh man what is this man";
+std::string needle = "man";
+
+std::size_t found = haystack.find(needle);
+if (found != std::string::npos) {
+    std::cout << "found at idx: " << found;
+}
+haystack.replace(found, needle.length(), "boi");
+```
+
+## Find the first occurrence of a substring
+
+### Python
+
+```python
+s = "ah apaan nih anjir"
+s.find("nih") # return idx of "nih", 9
+```
+
+### C
+
+```c
+char *haystack = "ah apaan nih anjir";
+char *needle = "nih";
+char *r = strstr(haystack, needle);
+if (r == NULL)
+    return -1;
+
+if ((intptr_t)r == 0)
+    return 0;
+
+int location = (intptr_t)r - (intptr_t)haystack;
+```
+
+### C++
+
+```cpp
+std::string haystack = "ah apaan nih anjir";
+std::string needle = "nih";
+
+std::size_t found = haystack.find(needle);
+if (found != std::string::npos) {
+    std::cout << "found at idx: " << found;
+}
+```
+
 
 # Map and Filter
 
