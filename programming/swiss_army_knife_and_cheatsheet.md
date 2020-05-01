@@ -68,7 +68,7 @@ std::vector<Person> people;
 
 // ascending sort, give the key
 std::sort(people.begin(), people.end(), 
-    [](const people &a, const people &b) { 
+    [](const Person &a, const Person &b) { 
         return a.age < b.age;
     }
 );
