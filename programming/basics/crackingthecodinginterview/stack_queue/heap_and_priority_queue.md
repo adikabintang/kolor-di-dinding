@@ -147,7 +147,7 @@ def heapify(arr: [int]):
                 right_child_idx = 2 * i + 2
             else:
                 break
-        i -= 1
+            i -= 1
 ```
 
 # Priority queue

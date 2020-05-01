@@ -138,6 +138,43 @@ q.empty();      // check if empty
 auto val = q.pop();
 ```
 
+# Priority queue/heap
+
+### Python
+
+__this is min heap__, people say we need to multiply by -1 to make a max heap.
+
+```python
+import heapq
+pq = []
+heapq.heappop(pq)
+heapq.heappush(pq, val)
+```
+
+### C++
+
+Min heap.
+
+```cpp
+std::priority_queue<int, std::vector<int>, std::greater<int>> q;
+
+for(int n : {1,8,5,6,3,4,0,9,7,2})
+    q.push(n);
+int root = q.top();
+q.pop();
+```
+
+Max heap.
+
+```cpp
+std::priority_queue<int> q;
+
+for(int n : {1,8,5,6,3,4,0,9,7,2})
+    q.push(n);
+int root = q.top();
+q.pop();
+```
+
 # Set
 
 ### Python
