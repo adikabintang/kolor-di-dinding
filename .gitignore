@@ -1,7 +1,7 @@
 au_ah_/
 trustpilot/
 telegram_token.txt
-
+.vscode
 *.class
 
 # Byte-compiled / optimized / DLL files
