@@ -392,6 +392,38 @@ if ((intptr_t)r == 0)
 int location = (intptr_t)r - (intptr_t)haystack;
 ```
 
+## More for C
+
+```c
+char src[100], dest[100];
+
+// copying string, don't use strcpy as it can cause overflow
+memset(dest, '\0', sizeof(dest));
+strcpy_s(src, sizeof(src), "nusa damai");
+strcpy_s(dest, sizeof(dest), src);
+
+// copying n chars of a string
+strncpy_s(dest, sizeof(dest), "nusa damai", n);
+
+// append to the end of a string
+strcat_s(dest, sizeof(dest), "addition");
+
+// comparing string
+// if equal, return 0
+// comparing lexicographically
+int res = strcmp(src, dest);
+
+// copy the content of memory, not null terminated like strcpy
+// memcpy has an undefined behavior when the memory of src and dest overlaps
+int arr[3] = {1, 2, 3};
+int brr[3];
+memcpy_s(brr, sizeof(brr), arr, sizeof(arr));
+
+// memmove can handle overlapping memory, but it operates
+// slower than memcpy
+memmove_s(brr, sizeof(brr), arr, sizeof(arr));
+```
+
 ### C++
 
 ```cpp

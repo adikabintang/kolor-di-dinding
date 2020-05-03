@@ -28,7 +28,9 @@
 - [Event Driven System](#event-driven-system)
 - [Consensus and data replication strategies](#consensus-and-data-replication-strategies)
 
-Source of my learning: https://github.com/donnemartin/system-design-primer
+Source of my learning:
+- https://github.com/donnemartin/system-design-primer
+- https://tianpan.co/hacking-the-software-engineer-interview/
 
 # Basic Scalability Topics
 
