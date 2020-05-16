@@ -392,6 +392,18 @@ if ((intptr_t)r == 0)
 int location = (intptr_t)r - (intptr_t)haystack;
 ```
 
+## String to lower, to upper
+
+### Python
+
+```python
+s = "str"
+b = s.isupper() # returns true or false
+b = s.isupper
+low = s.lower()
+up = s.upper()
+```
+
 ## More for C
 
 ```c
