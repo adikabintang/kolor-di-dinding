@@ -60,6 +60,12 @@ This will invoke the program and we can see many details including:
 If we recently open a program, there is a chance that the data is cached by `buffer caching` to reduce the number of major page faults and increase minor page faults.
 
 ## vmstat
+
+Sources: 
+
+- https://medium.com/@damianmyerscough/vmstat-explained-83b3e87493b3
+- https://access.redhat.com/solutions/1160343
+
 **Wait on I/O** is a situation when there are a large number of applications waiting for their I/O operations to get completed.
 
 When wait on i/o happens, the CPU becomes idle. Sometimes it is confusing to see the bottleneck when CPU is idle. This might be one of the problems.
@@ -79,6 +85,50 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 - `wa` under `cpu`: cpu wait on i/o. if it has high value, there is an i/o bottleneck
 - `id` under `cpu`: cpu idle
 - `bi` under `io`: blocks that are read into RAM from the disk. If `wa` and `bi` is high, there's i/o bottleneck
+- if `swpd` > 0, swap is being used. if `so` > 0, it's even worse, there is a RAM bottleneck (happens when swapping: kernel selects memory segment that is less frequently used and swapped out to disk)
+
+Here is a more detailed explanation:
+
+**procs**
+
+- `r`: number of processes in a running state, read from `/proc/[PID]/stat`
+- `b`: number of processes in an uninterruptable sleep state (a process that does not handle signals right away), read from `/proc/[PID]/stat`
+
+Example of uninterruptable sleep state process: device drivers when waiting for network/disk IO, it sleeps and accumulates received signals and reacts when the process resumes.
+
+**memory**
+
+- `swpd`: amount of swap memory used, the less the better, read from `/proc/[PID]/stat`
+- `free`: free RAM
+- `buff`: amount of memory used as buffers, read from `/proc/meminfo`
+- `cache`: cache size used, read from `/proc/meminfo`
+
+By the way, if we are running out of RAM + swap, OOM killer will save the day by killing process(es). It kills the process by badness score, which is rated by the process + children of the process (accumulated) takes the most RAM and the minimum number of process killed in order to free up memory to resolve the situation (kernel and root are less prioritized). Read more: https://docs.memset.com/other/linux-s-oom-process-killer#Linux'sOOMProcessKiller-HowdoesitselectaProcesstoKill?
+
+**swap**
+
+- `si`: amount of memory swapped in from disk per second
+- `so`: amount of memory swapped out to disk per second
+
+**IO**
+
+- `bi`: number of blocks read from disk per second
+- `bo`: number of blocks written disk per second
+
+**system**
+
+- `in`: number of interrupts per second, read from `/proc/stat` and `/proc/interrupts`
+- `cs`: number of context switches per second, read from `/proc/stat`
+
+**cpu**
+
+All read from `/proc/stat`.
+
+- `us`: time spent running non-kernel code, high when a user-space process messes up (like running a lame app that has `while(1)` without sleep)
+- `sy`: time spent running kernel code, high when a kernal-space process messes up
+- `id`: idle time
+- `wa`: waiting I/O time
+- `st`: time stolen from a virtual machine
 
 ## sar
 `sar` can also be used to see wait on i/o.
