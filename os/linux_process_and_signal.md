@@ -98,3 +98,11 @@ Harshness level: like SIGTERM.
 
 ## SIGQUIT
 Kill the process now and left a core dump. It is used when something is *seriously wrong*.
+
+# Troubleshooting and debugging linux processes with strace
+
+Source: https://www.tecmint.com/strace-commands-for-troubleshooting-and-debugging-linux/
+
+`strace` captures and records all system calls made by a process and the signals received by the process.
+
+For example, to see what system calls a program `df` calls, we can use `strace ls -h`

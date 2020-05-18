@@ -1,4 +1,7 @@
-Source: https://computing.llnl.gov/tutorials/pthreads/
+Sources: 
+
+- https://computing.llnl.gov/tutorials/pthreads/
+- http://outofsync.net/wiki/index.php?title=Monitoring_linux_system_performance
 
 # Process vs Thread
 
@@ -11,7 +14,15 @@ Images source: https://computing.llnl.gov/tutorials/pthreads/
 Main difference: thread only has its own stack. The rest is the same. This implies:
 
 1. A thread is lighter than a process
-2. Other than stack region, such as heap and file mapping, are shared between process and threads.
+2. Other than stack region, such as heap and file mapping, are shared between process and threads
+3. Spawning a thread is less expensive than spawning a new process because a thread does not need to copy resources on creation
+4. Kernel assigns 
+
+![creating_proc_vs_thread](http://outofsync.net/wiki/images/1/15/Process_thread.gif)
+
+image source: http://outofsync.net/wiki/index.php?title=Monitoring_linux_system_performance
+
+
 
 # Models for threaded programs:
 
