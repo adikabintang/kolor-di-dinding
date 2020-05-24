@@ -26,6 +26,7 @@ This provides security through process isolation assuming each process is given 
 Image source: [wikipedia](https://en.wikipedia.org/wiki/File:Virtual_address_space_and_physical_address_space_relationship.svg)
 
 ## Paging
+
 Source: [wikipedia](https://en.wikipedia.org/wiki/Paging)
 
 "Paging is a memory management scheme by which a computer stores and retrieves data from secondary storage for use in main memory".
@@ -41,12 +42,15 @@ A page fault is a type of exception raised by hardware when a runing program acc
 **Minor page fault** is a page request when the data is present in the RAM buffer cache [[slashroot](https://www.slashroot.in/linux-system-io-monitoring)].
 
 ## How to monitor system I/O
+
 ## free
+
 command: `free -mh`.
 
 `free` is mainly used to check RAM usage. we can see the total used, buffer, and cache.
 
 ## /usr/bin/time -v program
+
 Example: `/usr/bin/time -v code`
 
 This will invoke the program and we can see many details including:

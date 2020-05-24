@@ -153,6 +153,8 @@ heapq.heappush(pq, val)
 
 ### C++
 
+`#include <queue>`
+
 Min heap.
 
 ```cpp
@@ -160,8 +162,11 @@ std::priority_queue<int, std::vector<int>, std::greater<int>> q;
 
 for(int n : {1,8,5,6,3,4,0,9,7,2})
     q.push(n);
-int root = q.top();
-q.pop();
+
+while (!q.empty()) {
+    int minimum = q.top();
+    q.pop(); // remove the root
+}
 ```
 
 Max heap.
@@ -171,8 +176,11 @@ std::priority_queue<int> q;
 
 for(int n : {1,8,5,6,3,4,0,9,7,2})
     q.push(n);
-int root = q.top();
-q.pop();
+
+while (!q.empty()) {
+    int minimum = q.top();
+    q.pop(); // remove the root
+}
 ```
 
 # Set

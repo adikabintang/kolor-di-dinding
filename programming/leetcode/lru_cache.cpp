@@ -1,108 +1,124 @@
+/**
+ * https://leetcode.com/problems/lru-cache/submissions/
+ * Runtime: 184 ms, faster than 46.97% of C++ online submissions
+ * Memory Usage: 40.8 MB, less than 6.10% of C++ online submissions
+ */
 #include <iostream>
 #include <memory>
 #include <unordered_map>
 
-class DLNode {
+// TODO: make this as template class
+class DoublyLinkedListNode
+{
 public:
-    int key;
-    int val;
-    DLNode *prev;
-    DLNode *next;
-    
-    DLNode() {
-        prev = NULL;
-        next = NULL;
+    int key, value;
+    std::shared_ptr<DoublyLinkedListNode> next, prev;
+    DoublyLinkedListNode()
+    {
     }
 
-    DLNode(int key, int val) {
+    DoublyLinkedListNode(int key, int value) {
         this->key = key;
-        this->val = val;
-        DLNode();
+        this->value = value;
     }
 };
 
-class LRUCache {
+class LRUCache
+{
+private:
+    std::unordered_map<int, std::shared_ptr<DoublyLinkedListNode>> cache;
+    int capacity, counter;
+
+    // headered doubly linked list
+    // oldest->data1->data2->data3->latest
+    std::shared_ptr<DoublyLinkedListNode> latest, oldest;
+
+    // https://herbsutter.com/2013/06/05/gotw-91-solution-smart-pointer-parameters/
+    void addToLatest(std::shared_ptr<DoublyLinkedListNode> &n) {
+        auto current_latest = latest->prev;
+        n->prev = current_latest;
+        n->next = latest;
+        latest->prev = n;
+        current_latest->next = n;
+    }
+
+    void moveToLatest(std::shared_ptr<DoublyLinkedListNode> &n) {
+        auto prev = n->prev;
+        auto next = n->next;
+        prev->next = next;
+        next->prev = prev;
+        addToLatest(n);
+    }
+
+    int removeTheOldest() {
+        auto n = oldest->next;
+        auto next = n->next;
+        int key = n->key;
+        // reference counter -= 1
+        oldest->next = next;
+        next->prev = oldest;
+        return key;
+    }
+
 public:
-    int capacity;
-    std::unordered_map<int, DLNode*> cache;
-    DLNode *head = NULL;
-    DLNode *tail = NULL;
-    
-    LRUCache(int capacity) {
+    LRUCache(int capacity) : latest(new DoublyLinkedListNode()),
+                             oldest(new DoublyLinkedListNode())
+    {
         this->capacity = capacity;
-        head = new DLNode();
-        tail = new DLNode();
-        head->next = tail;
-        tail->prev = head;
+        this->counter = 0;
+        oldest->next = latest;
+        oldest->prev = nullptr;
+        latest->prev = oldest;
+        latest->next = nullptr;
     }
 
-    void append_on_head(DLNode *node) {
-        node->prev = head;
-        node->next = head->next;
-        head->next->prev = node;
-        head->next = node;
-    }
-
-    void move_to_newest(DLNode *node)
+    int get(int key)
     {
-        node->prev->next = node->next;
-        node->next->prev = node->prev;
-        append_on_head(node);
-    }
-
-    DLNode *remove_tail()
-    {
-        DLNode *n = tail->prev;
-        tail->prev = tail->prev->prev;
-        n->prev->next = tail;
-        return n;
-    }
-    
-    int get(int key) {
         if (cache.find(key) == cache.end())
             return -1;
-        
-        DLNode *n = cache[key];
-        move_to_newest(n);
-        
-        return n->val;
+
+        auto n = cache[key];
+        moveToLatest(n);
+        return n->value;
     }
-    
-    void put(int key, int value) {
-        if (cache.find(key) != cache.end())
-        {
-            DLNode *n = cache[key];
-            n->val = value;
-            move_to_newest(n);
+
+    void put(int key, int value)
+    {
+        std::shared_ptr<DoublyLinkedListNode> n;
+        if (cache.find(key) != cache.end()) {
+            n = cache[key];
+            n->value = value;
+            moveToLatest(n);
             return;
         }
 
-        if (cache.size() >= capacity) {
-            // delete the oldest one from queue
-            DLNode *t = remove_tail();
-            // delele the oldest one from cache
-            cache.erase(t->key);
-            delete(t);
-            t = NULL;
-        }
-        DLNode *n = new DLNode(key, value);
-        append_on_head(n);
+        n = std::make_shared<DoublyLinkedListNode>(key, value);
         cache.insert(std::make_pair(key, n));
-    }
+        if (counter < capacity) {
+            counter++;
+        }
+        else {
+            // get the oldest, remove
+            int key = removeTheOldest();
+            // reference counter -= 1
+            cache.erase(key);
+        }
 
+        addToLatest(n);
+    }
 };
 
 int main()
 {
-    LRUCache* obj = new LRUCache(2);
+    LRUCache *obj = new LRUCache(2);
     //int param_1 = obj->get(1);
-    obj->put(1,1);
-    obj->put(2,2);
-    obj->put(1,10);
-    obj->put(3,3);
+    obj->put(1, 1);
+    obj->put(2, 2);
+    obj->put(1, 10);
+    obj->put(3, 3);
     std::cout << obj->get(1) << std::endl;
     std::cout << obj->get(2) << std::endl;
     std::cout << obj->get(3) << std::endl;
-    
+
     return 0;
 }

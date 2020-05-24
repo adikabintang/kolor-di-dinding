@@ -22,7 +22,7 @@ class LRUCache:
         self.cache[key] = value
 
         if len(self.cache) > self.max_capacity:
-            self.cache.popitem(last = False)    
+            self.cache.popitem(last=False)
 
 # Your LRUCache object will be instantiated and called as such:
 # obj = LRUCache(capacity)

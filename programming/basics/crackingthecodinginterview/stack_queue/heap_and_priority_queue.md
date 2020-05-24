@@ -102,7 +102,7 @@ def poll() -> int:
 
 Takes at most `O(log n)` operation, depends on the height.
 
-The key to remember: delete the root, keep comparing down to the leaf.
+The key to remember: delete the root, take the last one to top, keep comparing it down to the leaf.
 
 ### Create a heap from an array: the O(n log n) way
 
@@ -118,7 +118,7 @@ def create_heap(input: [int]):
 
 How: Go from the leaf right (last index of the array) to the root (first index). Do heap adjustment along the way.
 
-Takes `O(n)`.
+Takes `O(n)`. Read more: https://stackoverflow.com/questions/9755721/how-can-building-a-heap-be-on-time-complexity
 
 ```python
 def heapify(arr: [int]):
@@ -126,6 +126,7 @@ def heapify(arr: [int]):
     while i >= 0:
         left_child_idx = 2 * i + 1
         right_child_idx = 2 * i + 2
+        j = i
         while left_child_idx < len(arr) or right_child_idx < len(arr):
             largest_idx = 0
             if left_child_idx < len(arr) \
@@ -138,16 +139,17 @@ def heapify(arr: [int]):
                     if right_child_idx < len(arr) \
                     else left_child_idx
 
-            if arr[i] < arr[largest_idx]:
-                temp = arr[i]
-                arr[i] = arr[largest_idx]
+            if arr[j] < arr[largest_idx]:
+                temp = arr[j]
+                arr[j] = arr[largest_idx]
                 arr[largest_idx] = temp
-                i = largest_idx
-                left_child_idx = 2 * i + 1
-                right_child_idx = 2 * i + 2
+                j = largest_idx
+                left_child_idx = 2 * j + 1
+                right_child_idx = 2 * j + 2
             else:
                 break
-            i -= 1
+
+        i -= 1
 ```
 
 # Priority queue
