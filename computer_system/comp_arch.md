@@ -16,10 +16,12 @@ ISA defines supported data types, the registers, IO model, etc.
 
 x86 diagram:
 
-[!x86pic](https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/80186_arch.png/1024px-80186_arch.png)
+![x86pic](https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/80186_arch.png/1024px-80186_arch.png)
 
 Source: https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/80186_arch.png/1024px-80186_arch.png
 
 3 types of system bus: control bus, address bus, data bus. see here: https://en.wikipedia.org/wiki/System_bus
 
 PCIe is an expansion bus, it is fast. Used for GPU, ethernet, ssd, etc.
+
+NVMe is the interface of the SSD. NVMe stands for Non Volatile Memory Express. It is connected to the PCIe.
