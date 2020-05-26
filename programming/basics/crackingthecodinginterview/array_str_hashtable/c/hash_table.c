@@ -1,6 +1,7 @@
 #include "hash_table.h"
+#include <assert.h>
 
-int __get_idx(int key) {
+size_t __get_idx(int key) {
     return key % HT_CAPACITY;
 }
 
@@ -8,71 +9,86 @@ int __get_idx(int key) {
 // https://stackoverflow.com/questions/4980757/how-do-hashtables-deal-with-collisions
 void ht_insert(hash_table *h, int key, int value) {
     size_t idx = __get_idx(key);
-    ll_node **ptr = &(h->table[idx]), **prev = NULL;
-    while (*ptr) {
-        if ((*ptr)->key == key) {
-            (*ptr)->value = value;
+    ll_node *n = NULL;
+
+    n = h->table[idx];
+    while (n) {
+        if (n->key == key) {
+            n->value = value;
             return;
         }
-        prev = ptr;
-        *ptr = (*ptr)->next;
+        n = n->next;
     }
-    *ptr = malloc(sizeof(ll_node));
-    (*ptr)->key = key;
-    (*ptr)->value = value;
-    (*ptr)->next = NULL;
-    if (*prev) {
-        (*prev)->next = *ptr;
-    }
+    
+    // prepend at the head of linked list
+    n = malloc(sizeof(ll_node));
+    assert(n);
+    n->key = key;
+    n->value = value;
+    n->next = h->table[idx]; // note for me: it's NULL for the first time, don't be stupidly confused
+    h->table[idx] = n;
+    
+    h->size++;
 }
 
 hash_table *ht_create() {
     size_t i = 0;
-    hash_table *h = malloc(sizeof(hash_table));
+    hash_table *h = NULL;
 
-    // https://softwareengineering.stackexchange.com/questions/201104/sizeof-style-sizeoftype-or-sizeof-variable
-    // sizeof pointer: trying to access a variable that doesn't exist, yet
-    h->table = malloc(HT_CAPACITY * sizeof(ll_node *)); 
-    
+    h = malloc(sizeof(hash_table));
+    assert(h);
+    h->size = 0;
+    // why llnode * ? table is actually multidimensional array **table
+    // if int *a = malloc(sizeof(int)), then to do the same, int **a = malloc(sizeof(int*))
+    h->table = malloc(HT_CAPACITY * sizeof(ll_node *));
+    assert(h->table);
+
     for (i = 0; i < HT_CAPACITY; i++) {
         h->table[i] = NULL;
     }
-
     return h;
 }
 
 bool ht_get(hash_table *h, int key, int *value) {
     size_t idx = __get_idx(key);
-    ll_node *ptr = h->table[idx];
-    while (ptr) {
-        if (ptr->key == key) {
-            *value = ptr->value;
+    ll_node *node = h->table[idx];
+
+    while (node) {
+        if (node->key == key) {
+            *value = node->value;
             return true;
         }
-        ptr = ptr->next;
+        node = node->next;
     }
+
     return false;
 }
 
 void ht_delete(hash_table *h, int key) {
     size_t idx = __get_idx(key);
-    ll_node **ptr = &(h->table[idx]), **prev = ptr, *next;
-    ll_node **head = &(h->table[idx]);
-    if ((*head)->key == key) {
-        *head = (*head)->next;
-        free(*ptr);
+    ll_node *n = NULL, *prev = NULL;
+
+    n = h->table[idx];
+
+    // heh this is not "tasteful" according to Torvalds
+    if (n->key == key) {
+        h->table[idx] = n->next;
+        free(n);
+        n = NULL;
+        h->size--;
         return;
     }
-    while (*ptr) {
-        if ((*ptr)->key == key) {
-            next = (*ptr)->next;
-            free(*ptr);
-            *ptr = next;
-            (*prev)->next = *ptr;
+
+    prev = n;
+    while (n) {
+        if (n->key == key) {
+            prev->next = n->next;
+            free(n);
+            h->size--;
             return;
         }
-        prev = ptr;
-        *ptr = (*ptr)->next;
+        prev = n;
+        n = n->next;
     }
 }
 
@@ -88,6 +104,9 @@ void ht_free(hash_table *h) {
         while (ptr) {
             head = head->next;
             free(ptr);
+            ptr = NULL;
+            ptr = head;
+            h->size--;
         }  
     } 
 }
