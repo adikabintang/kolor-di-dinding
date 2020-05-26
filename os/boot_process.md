@@ -20,11 +20,10 @@ Sources:
 1. BIOS searches, loads, and executes Master Boot Record (MBR) bootloader. The boot loader can be in hard drive or USB stick. It also does some integrity check.
 2. MBR contains a program named GRUB boot loader. It loads the GRUB boot loader and executes it.
 3. GRUB (Grand Unified Bootloader) loads and executes kernel and initrd images.
-4. Kernel mounts the root file system
-5. Kernel executes `kernel_init()`, which mount the root file system `/` (on RAM or disk, depends on the configuration).
-6. If a temporary `/` file system is needed on RAM, initrd (initial RAM disk) is used by the kernel as the temporary root file system until the kernel is booted and the real root filesystem is mounted.
-7. executes /sbin/init (which has PID 1). In Fedora, /sbin/init is a symlink to systemd. It identifies the default init level and uses that to load all appropriate programs.
-8.  `Runlevel` programs: programs that are run when the system is booting up (and also some when shutting down). The runlevel programs are in `/etc/rc.d/rc*.d/`.
+4. Kernel executes `kernel_init()`, which mount the root file system `/` (on RAM or disk, depends on the configuration).
+5. If a temporary `/` file system is needed on RAM, initrd (initial RAM disk) is used by the kernel as the temporary root file system until the kernel is booted and the real root filesystem is mounted.
+6. executes /sbin/init (which has PID 1). In Fedora, /sbin/init is a symlink to systemd. It identifies the default init level and uses that to load all appropriate programs.
+7.  `Runlevel` programs: programs that are run when the system is booting up (and also some when shutting down). The runlevel programs are in `/etc/rc.d/rc*.d/`.
 
 # More complete of step 1 - 3 above
 

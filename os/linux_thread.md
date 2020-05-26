@@ -2,6 +2,8 @@ Sources:
 
 - https://computing.llnl.gov/tutorials/pthreads/
 - http://outofsync.net/wiki/index.php?title=Monitoring_linux_system_performance
+- https://stackoverflow.com/questions/20772476/when-to-use-pthread-condition-variables
+- https://en.wikipedia.org/wiki/Priority_inversion
 
 # Process vs Thread
 
@@ -50,12 +52,43 @@ image source: http://outofsync.net/wiki/index.php?title=Monitoring_linux_system_
 # Condition variable
 
 1. Difference between mutex and condition variable:
-   1. Mutext implement synchronization by controlling thread access to data
+   1. Mutex implement synchronization by controlling thread access to data
    2. Condition variable implement synchronization based on the actual value of data
-2. 
 
+Typical usage of condition variable:
+
+**Task 1**: Done by thread A, does something then signals B who are running another task (A telling B to go ahead. B waits until it is signalled by A)
+
+```C
+// there is a global variable "bool done = false;"
+pthread_mutex_lock(&lock);
+// do something
+done = true;
+pthread_cond_signal(&cond);
+pthread_mutex_unlock(&lock);
+```
+
+**Task 2**: Done by thread B
+
+```C
+pthread_mutex_lock(&lock);
+while (!done) { // can also be a counter. the point is it waits when this condition == false
+  pthread_cond_wait(&cond);
+}
+// do something
+pthread_mutex_unlock(&lock);
+```
+
+In the above example, the result is task A is done before task B.
 
 # Misc
 
 1. When saying "thread-safe", it generally means "no race condition".
-2. 
+2. Priority inversion example:
+   1. 3 tasks with different priority, implied by the names: LOW, MEDIUM, HIGH
+   2. LOW and HIGH depends on a resource R
+   3. LOW accesses the R
+   4. HIGH wants to access the R. LOW must release R immediately because HIGH has higher priority
+   5. MEDIUM wants to do something, causing LOW to stop working before it releases R
+   6. HIGH gets blocked
+   7. Although it can cause delay to the overall process (unlike deadlock that makes the whole task wait indefinitely), it can be ignored sometimes.
