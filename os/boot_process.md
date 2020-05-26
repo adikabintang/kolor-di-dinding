@@ -1,6 +1,6 @@
 source: https://www.thegeekstuff.com/2011/02/linux-boot-process/
 
-1. BIOS searches, loads, and executes Master Boot Record (MBR) bootloader. The boot loader can be in hard drive of USB stick. It also does some integrity check.
+1. BIOS searches, loads, and executes Master Boot Record (MBR) bootloader. The boot loader can be in hard drive or USB stick. It also does some integrity check.
 2. MBR contains GRUB boot loader. It loads the GRUB boot loader and executes it.
 3. GRUB (Grand Unified Bootloader) loads and executes kernel and initrd images.
 4. Kernel mounts the root file system
@@ -48,6 +48,8 @@ Then, it runs **initial ram disk** scheme, which is loading a temporary root fil
 
 After the `kernel_init()` finishes, it enters **init process**, implemented by **systemd**. The systemd checks the root file system, checks and mounts additional file systems, initialize network cards, start many daemons, sets getty on the terminals for user to use the shell.
 
-Very good diagram of the boot process:[boot](https://miro.medium.com/max/700/1*_riwUOYCIRXdZVJHtODxoA.png)
+Very good diagram of the boot process:
+
+![boot](https://miro.medium.com/max/700/1*_riwUOYCIRXdZVJHtODxoA.png)
 
 Image source: https://medium.com/@cloudchef/linux-boot-process-part-2-bd7514913495
