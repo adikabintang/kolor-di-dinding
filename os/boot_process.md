@@ -19,6 +19,8 @@ Protection ring: privilege levels (rings). Ring 0-3. Ring 0 is the most privileg
 
 Ring 3 (user mode) cannot access IO nor manage memory. To do so, it uses system call. For example, `malloc()` is the function that implements the system call `sbrk()`. A system call is initiated by generating a **software interrupt**. It switches the content to kernel mode and switches back to user mode afterwards.
 
+BIOS (Basic IO System) is a *firmware* that initializes hardware during the booting.
+
 When the computer is starting, BIOS performs **POST (power on self-test)** and **boot**. POST checks the connected hardware such as CPU, memory, GPU, disk controllers. Boot starts the boot process by loading the first sector of memory (master boot record (MBR)).
 
 Because the execution context provided by BIOS is too restrictive, it uses boot loader (GRUB 2) to help load Linux kernel. GRUB 2 is too big to store in MBR, that's why it is divided into stages. The first stage is the bare minimal code to boot to the next stage (second stage). The second stage is the `/boot/grub` that loads the configuration file and drivers from the file system.
@@ -46,8 +48,6 @@ Then, it runs **initial ram disk** scheme, which is loading a temporary root fil
 
 After the `kernel_init()` finishes, it enters **init process**, implemented by **systemd**. The systemd checks the root file system, checks and mounts additional file systems, initialize network cards, start many daemons, sets getty on the terminals for user to use the shell.
 
-Very good diagram of the boot process:
-
-![boot](https://miro.medium.com/max/700/1*_riwUOYCIRXdZVJHtODxoA.png)
+Very good diagram of the boot process:[boot](https://miro.medium.com/max/700/1*_riwUOYCIRXdZVJHtODxoA.png)
 
 Image source: https://medium.com/@cloudchef/linux-boot-process-part-2-bd7514913495
