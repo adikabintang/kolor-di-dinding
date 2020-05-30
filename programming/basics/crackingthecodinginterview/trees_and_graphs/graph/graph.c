@@ -49,7 +49,7 @@ graph *graph_create(int n_vertices) {
     g->visited = malloc(n_vertices * sizeof(bool));
     CHECK_MALLOC(g->visited)
     g->n_vertices = n_vertices;
-    g->adj_list = malloc(n_vertices * sizeof(graph *));
+    g->adj_list = malloc(n_vertices * sizeof(node *));
 
     for (i = 0; i < n_vertices; i++) {
         g->adj_list[i] = NULL;

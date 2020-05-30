@@ -27,7 +27,7 @@ void print_all(item *head)
         // what is this: see the above link (1) and (2) question 7
         // the point is: we can get the address of the struct by finding the
         // offset of the member from the object
-        item *n = (void *)(current)-offsetof(item, list_items);
+        item *n = (void *)(current) - offsetof(item, list_items);
         printf("-> %d\n", n->val);
         current = current->next;
     }
