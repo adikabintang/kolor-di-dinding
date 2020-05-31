@@ -6,6 +6,8 @@ Sources:
 - https://brennan.io/2015/01/16/write-a-shell-in-c/
 - https://github.com/adikabintang/emposh
 
+0. Keyboard input generates a hardware interrupt. See https://www.tldp.org/HOWTO/Unix-and-Internet-Fundamentals-HOWTO/devices.html
+
 1. The shell (`/bin/sh`) reads the STDIN. For example, we type `ls -l`, the shell reads the string and tokenize the string.
 
 How to read STDIN: https://github.com/adikabintang/emposh/blob/master/src/util.c#L10

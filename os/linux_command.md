@@ -1,33 +1,41 @@
 # Contents
-- [file](#file)
-- [find](#find)
-- [locate](#locate)
-- [grep](#grep)
-- [du](#du)
-- [df](#df)
-- [sort](#sort)
-- [wc](#wc)
-- [uptime](#uptime)
-- [whatis](#whatis)
-- [tee](#tee)
-- [sed](#sed)
-- [awk](#awk)
-- [read](#read)
-- [cut](#cut)
-- [tr](#tr)
-- [uniq](#uniq)
-- [xargs](#xargs)
-- [traceroute](#traceroute)
-- [dig](#dig)
-- [telnet](#telnet)
-- [netstat](#netstat)
-- [nmap](#nmap)
-- [Loops](#Loops)
-- [Conditional](#Conditional)
-- [Arithmethic](#Arithmethic)
-- [Array](#Array)
-- [Get](#Get)
-- [to](#to)
+- [Contents](#contents)
+- [Really Basics](#really-basics)
+  - [file](#file)
+  - [find](#find)
+  - [locate](#locate)
+  - [grep](#grep)
+  - [id](#id)
+  - [chmod](#chmod)
+  - [du](#du)
+  - [df](#df)
+  - [sort](#sort)
+  - [wc](#wc)
+  - [uptime](#uptime)
+  - [whatis](#whatis)
+  - [tee](#tee)
+  - [sed](#sed)
+  - [awk](#awk)
+  - [read](#read)
+  - [cut](#cut)
+  - [tr](#tr)
+  - [uniq](#uniq)
+  - [xargs](#xargs)
+- [Basic Networking](#basic-networking)
+  - [traceroute](#traceroute)
+  - [dig](#dig)
+  - [telnet](#telnet)
+  - [netstat](#netstat)
+  - [lsof](#lsof)
+  - [nmap](#nmap)
+- [Loop, Conditional, etc](#loop-conditional-etc)
+  - [Loops](#loops)
+  - [Conditional](#conditional)
+  - [Arithmethic Operations](#arithmethic-operations)
+  - [Array](#array)
+  - [Get return status of last executed command](#get-return-status-of-last-executed-command)
+  - [to uppercase and to lowercase](#to-uppercase-and-to-lowercase)
+  - [2>&1](#21)
 
 # Really Basics
 ## file
@@ -319,7 +327,14 @@ wanjir
 ```
 
 ## xargs
-...
+
+Example:
+
+```bash
+echo "tu wa ga" | xargs mkdir
+```
+
+Will result in `mkdir tu wa ga`
 
 # Basic Networking
 ## traceroute

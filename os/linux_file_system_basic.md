@@ -32,6 +32,12 @@ or
 $ stat file
 ```
 
+To see use of inodes in partition:
+
+```bash
+df -i
+```
+
 ## Type of file: link
 Link is like a shortcut. It points to the inode through a file. There are two kinds of links:
 - Hard link

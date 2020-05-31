@@ -39,8 +39,8 @@ Number of zombie process. Kill zombie process with `kill -s SIGCHLD pid`. They a
   - `id` CPU idle, the higher the better. If the system is slow but CPU idle is high, most probably it's not because of the CPU bound processes.
   - `wa` IO wait, the less the better. If IO wait is high, probably the system is slow because of IO wait or maybe RAM issues (if swap is on).
 
-2. See the `top` with CPU usage sorted: `top -o %CPU`
-3. See the `top` with memory usage sorted: `top -o %MEM`
+1. See the `top` with CPU usage sorted: `top -o %CPU`
+2. See the `top` with memory usage sorted: `top -o %MEM`
 
 So far, `top` is OK for examining CPU and RAM issues. What about I/O?
 
@@ -122,6 +122,64 @@ A client C cannot open example.com. What to do?
    2. `ping` the gateway IP address
 2. Check if the DNS returns an IP:
    1. `nslookup example.com` or use `dig`
-3. Use `traceroute` to see latency to each hop (let's hop this is not blocked by the firewall: traceroute uses ICMP (in windows) or UDP (linux))
+3. Use `traceroute` to see latency to each hop. See appendix A to see how traceroute works.
+
+From server:
+1. Check if the server is listening with `netstat -tulpn`
+2. Check any firewall setting
 
 Deeper see [linux_networking_analysis.md](linux_networking_analysis.md)
+
+# No space left on device
+
+Source: https://www.ivankuznetsov.com/2010/02/no-space-left-on-device-running-out-of-inodes.html
+
+This can be caused by:
+
+1. No space left on disk, and/or
+2. No inode left
+
+Read more about inode [here](linux_file_system_basic.md#inode).
+
+How to solve:
+
+1. See if we still have space on disk. Run `df -h`. If the root partition is full, we need more space. Delete unnecessary files (perhaps start with `/var/log/*`, and check the logrotate setting if this is really the root cause).
+2. If the root partition disk usage is not full but we still have the problem, see the inode usage. Run `df -i`.
+
+Sample output: 
+
+```
+Filesystem                Inodes  IUsed   IFree IUse% Mounted on
+devtmpfs                  978100    654  977446    1% /dev
+tmpfs                     983195    287  982908    1% /dev/shm
+tmpfs                     983195   1196  981999    1% /run
+tmpfs                     983195     17  983178    1% /sys/fs/cgroup
+/dev/mapper/fedora-root  3276800 3276800 0         100% /
+```
+
+If the `IUse%` is 100%, we are running out of inodes. How can this be possible? An inode describe a file or a dir. If we have too many small/zero size files and empty dir, we can take all inodes available without taking all disk usage.
+
+3. What we want to do is to delete unnecessary files, especially the small/0 size files that take up the inodes.
+4. To see which dir has the most files in it:
+
+```bash
+for i in /*; do echo $i; find $i | wc -l; done
+```
+
+5. Once you find the culprit, `rm` them.
+
+# Appendix A: how traceroute works
+
+Source: https://www.slashroot.in/how-does-traceroute-work-and-examples-using-traceroute-command
+
+First of all, remember that there is a TTL field in the IP packet. It gives the maximum number of *hops* it can go through (not time). By default, the TTL is 30. Everytime an IP packet goes through a hop, such as router, the router will decrement by 1. If the TTL field is 1, th router will reply with ICMP message to say to the sender that "TTL exceeded".
+
+See example:
+
+```
+     sender --> R1 --> R2 --> R3 --> receiver
+TTL:     30 --> 29 --> 28 --> 27 --> 26      OK
+TTL:     1  --> 0                            ICMP returns "TTL exceeded" 
+```
+
+Traceroute sends ICMP/UDP/TCP message to the destination starting with TTL=1 and increasing it til it reaches the destination. Then, the nearest hop returns this TTL exceeded message. That's how it knows the hops. It does the this with the same TTL 3 times to calculate the average round trip time. Why it uses different protocol? Is ICMP enough? Somethimes the protocol is blocked by the firewall, that's why it can use another protocol that is not blocked.
