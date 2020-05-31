@@ -22,14 +22,14 @@
 9. To find out the default gateway MAC address, it makes an **ARP query**, asking *"who is $(default IP address)?"*
    1.  src: my MAC address
    2.  dest: broadcast (FF:FF:FF:FF:FF:FF)
-10. The default gateway will reply with **ARP reply** telling it's him and give the MAC address inside the ARP reply message.
+10. The default gateway will reply with **ARP reply** telling it's him and give the MAC address inside the ARP reply message. It saves the associated MAC address to the IP address until the the timeout is reached, it is removed from the ARP table, and the ARP request is made again.
 11. Then my computer can send the DNS query to the default gateway.
 
 ### Part 3: Routing the packet to the DNS server
 
 12. When the default gateway receives the DNS query packet, it will forward the packet to the border router of the ISP.
 13. The border router is actually part of the ISP backbone network. It is a network owned by the ISP. This network consists of a bunch of routers. This network runs a Interior Gateway Protocol (IGP) such as OSPF, RIP, EIGRP, IS-IS, etc. These routers, if connected to another backbone network, can also be BGP routers. See [routing protocol](routing_protocol.md).
-14. Typically, the DNS returned by the DHCP server is the DNS owned by the ISP. It acts as a cache as well as *DNS recursive resolver*. If it knows the IP address of example.com, it returns the IP address within a DNS reply message to the DNS resolver (client). Otherwise, it will recursively query the example.com to the *authoritative DNS*. See appendix A.
+14. Typically, the IP address of the DNS returned by the DHCP server is the local DNS server. It acts as a cache as well as *DNS recursive resolver*. If it knows the IP address of example.com, it returns the IP address within a DNS reply message to the DNS resolver (client). Otherwise, it will recursively query the example.com to the *authoritative DNS*. See appendix A.
 
 ### Part 4: TCP and HTTP
 
