@@ -61,12 +61,12 @@ Split OSPF into areas. There must be an area 0.
 ------------------            ---------------------
 |  area 1        |            |     area 0        |
 | 10.10.0.0/24   |----ABR_1---|   12.12.0.0/24  ASBR-----another AS
-| 10.10.1.0/24   |            |     12.12.1.0/24  |
+| 10.10.1.0/24   |            |   12.12.1.0/24    |
 ------------------            --------------------|
                                         |
                                       ABR_2
                                         |
-                              ---------ABR_4-------
+                              ---------------------
                               |     area 2        |
                               |     13.13.0.0/24  |
                               |     13.13.1.0/24  |
@@ -81,4 +81,22 @@ Autonomous System Border Router (ASBR) is the border router that is connected an
 
 # BGP
 
-TODO
+Sources:
+- https://www.youtube.com/watch?v=_Z29ZzKeZHc
+- https://en.wikipedia.org/wiki/Border_Gateway_Protocol
+- Computer Networking: Principles, Protocols, and Practice (https://ufdc.ufl.edu/AA00011742/00001)
+- https://networklessons.com/bgp/bgp-route-reflector
+
+1. BGP is path vector protocol. What is path? it's the AS path. So it does something like "to go to 69.69.69.0/24 the path is ASN 65576, 64585, 65538".
+2. 2 BGP routers that are connected and work together is called BGP peered routers.
+   1. If they belong to the same AS, it's called iBGP peer
+   2. If they belong to different ASes, it's called eBGP peer
+3. iBGP peer does not forward the advertisement to another iBGP peeer. That's why iBGP routers must be connected in a fully meshed. If the number of iBGP routers are too many to be in fully mesh, we can use Route Reflector (RR) that forward the advertisement to another iBGP routers, see [here](https://networklessons.com/bgp/bgp-route-reflector)
+4. To prevent loops, BGP router does not forward/save advertisement that contains its' own AS number in the path.
+5. If there are 2 path to a certain subnetwork, BGP prefers the more specific path.
+   1. For example:
+      1. Path 1: AS 65534, 65535 for 1.1.1.0/24
+      2. Path 2: AS 65576, 62345 for 1.1.0.0/16
+   2. When there is a traffic for 1.1.1.64, it will choose path 1. Vulnerability: BGP hijacking, see [wiki](https://en.wikipedia.org/wiki/BGP_hijacking).
+6. In order to be able to route traffics from inside AS to outside, the AS border router must be configured with `next-hop-self` to the interior AS.
+7. The interior AS routing protocol can be any IGP such as OSPF, EIGRP, RIP, IS-IS, etc.
