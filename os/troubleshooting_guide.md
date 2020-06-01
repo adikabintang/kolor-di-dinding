@@ -168,6 +168,10 @@ for i in /*; do echo $i; find $i | wc -l; done
 
 5. Once you find the culprit, `rm` them.
 
+Deleting files sometimes does not free the inode. Why?
+
+When we `rm` a file, it will unlink the file from the dir structure. But, if the file is still opened by a running process, it will still be there. See [[redhat](https://access.redhat.com/solutions/2316)].
+
 # Appendix A: how traceroute works
 
 Source: https://www.slashroot.in/how-does-traceroute-work-and-examples-using-traceroute-command
