@@ -1,47 +1,7 @@
-Notes taken while I learn from here: https://www.slashroot.in/linux-system-io-monitoring 
+Source: https://www.slashroot.in/linux-system-io-monitoring 
 
-# First things first
-## Virtual Memory
-source: [wikipedia](https://en.wikipedia.org/wiki/Virtual_memory)
 
-Virtual memory is technique which "creates the illusion to users of a very large main memory".
-
-The OS maps memory addresses (virtual addresses) used by a program into physical addresses in computer memory.
-
-The benefits of virtual memory:
-- Applications do not have to manage a shared memory space
-- Security: memory isolation
-- Paging: allowing to conceptually use more memory than might be physically available.
-
-For further info, see [wikipedia](https://en.wikipedia.org/wiki/Virtual_memory)
-
-## Virtual address space
-Source: [wikipedia](https://en.wikipedia.org/wiki/Virtual_address_space)
-
-Virtual address space is the set of ranges of virtual addresses that an OS makes available to a process. 
-
-This provides security through process isolation assuming each process is given a separate address space.
-
-![vas](https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Virtual_address_space_and_physical_address_space_relationship.svg/470px-Virtual_address_space_and_physical_address_space_relationship.svg.png)
-Image source: [wikipedia](https://en.wikipedia.org/wiki/File:Virtual_address_space_and_physical_address_space_relationship.svg)
-
-## Paging
-
-Source: [wikipedia](https://en.wikipedia.org/wiki/Paging)
-
-"Paging is a memory management scheme by which a computer stores and retrieves data from secondary storage for use in main memory".
-
-The OS retrieves data from secondary storage in same-size blocks called *pages*.
-
-Paging is part of virtual memory implementations to let program exceed the size of available physical RAM.
-
-A page fault is a type of exception raised by hardware when a runing program accesses a memory page that is not currently mapped by the memory management unit (MMU) into the virtual address space of a process [[wikipedia](https://en.wikipedia.org/wiki/Page_fault)].
-
-**Major page fault** is a request done to fetch pages from the hard disk and buffer it to RAM [[slashroot](https://www.slashroot.in/linux-system-io-monitoring)].
-
-**Minor page fault** is a page request when the data is present in the RAM buffer cache [[slashroot](https://www.slashroot.in/linux-system-io-monitoring)].
-
-## How to monitor system I/O
+# How to monitor system I/O
 
 ## free
 
@@ -153,10 +113,13 @@ Linux 4.20.10-200.fc29.x86_64 (localhost.localdomain) 	02/28/2019 	_x86_64_	(4 C
 ```
 
 # How to identify which process is taking heavy IO in linux
+
 ## top
+
 Open `top` and press `F`. Select what we want to display, and sort. After pressing `F`, there is a guide at the top.
 
 ## iostat
+
 `iostat` provides some detailed information about the io usage.
 
 Example output of `iostat`:
