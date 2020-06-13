@@ -1,6 +1,6 @@
 # The Linux Boot Process
 
-Sources: 
+Sources:
 
 - https://www.thegeekstuff.com/2011/02/linux-boot-process/
 - https://wiki.debian.org/BootProcess

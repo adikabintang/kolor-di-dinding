@@ -7,7 +7,8 @@ Sources:
 - https://stackoverflow.com/questions/46450341/chroot-vs-docker
 - https://en.wikipedia.org/wiki/Linux_namespaces
 - https://medium.com/@saschagrunert/demystifying-containers-part-i-kernel-space-2c53d6979504
-
+- https://www.youtube.com/watch?v=sK5i-N34im8
+- 
 Just the oversimplified of how Docker works.
 
 Docker mainly uses these two things to work:
