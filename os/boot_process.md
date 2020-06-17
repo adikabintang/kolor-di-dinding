@@ -9,6 +9,7 @@ Sources:
 - https://stackoverflow.com/questions/44274648/which-one-is-pid1-sbin-init-or-systemd
 - https://www.tecmint.com/systemd-replaces-init-in-linux/
 - https://en.wikipedia.org/wiki/Master_boot_record
+- https://www.youtube.com/watch?v=boxF9t29xZQ (longer)
 
 # Some terms
 

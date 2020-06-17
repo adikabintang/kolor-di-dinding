@@ -31,9 +31,11 @@ Like PAT, but the public IP used for masquerading is taken from a pool of public
 
 Like dynamic NAT, but it is static: the mapping is fixed and the public IP is not released after use.
 
-TODO: 
+## NAT problem
 
-- NAT traversal, useful for VoIP or peer-to-peer
+consider VoIP and peer-to-peer application. if both problem sits behind NATs, then they cannot how to initiate the connection.
+
+NAT traversal solves this problem https://en.wikipedia.org/wiki/NAT_traversal.
 
 # Firewall
 
