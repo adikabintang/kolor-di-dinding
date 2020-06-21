@@ -5,6 +5,7 @@
   - [find](#find)
   - [locate](#locate)
   - [grep](#grep)
+  - [tail](#tail)
   - [id](#id)
   - [chmod](#chmod)
   - [du](#du)
@@ -60,6 +61,7 @@ locate main.c (will look every file containing main.c, like `grep main.c`)
 ```
 
 ## grep
+
 https://www.thegeekstuff.com/2009/03/15-practical-unix-grep-command-examples/ 
 
 Examples:
@@ -108,17 +110,29 @@ Two lines above this line is empty.
 $ grep -w "word" file
 ```
 
+## tail
+
+Follow: `-f`
+
+Last n lines: `-n n`
+
+Example: `tail -f -n 10 file.log`
+
 ## id
+
 Checks users and group. Example:
+
 ```bash
 $ id
 uid=1000(bintang) gid=1000(bintang) groups=1000(bintang),10(wheel),971(docker),974(wireshark) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
 ```
 
 ## chmod
+
 Usual mode, refer here: http://permissions-calculator.org/info/ 
 
 Special mode:
+
 **setuid**: executable file with the setuid bit can be executed with the privileges of the file's owner. `chmod 4xxx file` or `chmod u+s`.
 
 **setgid**: executable file with the setgid can be executed with the privileges of the file's group. `chmod 2xxx file` or `chmod g+s file`.
@@ -126,6 +140,7 @@ Special mode:
 **sticky bit**: when a directory's sticky bit is set, the filesystem treats the files in such directories in a special way so that *only the file owner's, dir owner's, or root can rename/delet the file*. Example: `/tmp` folder. `chmod 1xxx file`.
 
 ## du
+
 check file/dir size.
 example:
 ```
@@ -135,10 +150,14 @@ $ du -h foldername -d 0 (-d for depth, 0 will print the size of foldername only)
 $ du -h foldername -d 1 (will print -d 0 and the recursive of depth 1)
 ```
 ## df
+
 - show disk usage
 - find out which partition a directory is on. Command: `df -h /path/to/dir`
+
 ## sort
+
 example
+
 ```bash
 $ cat file.txt
 b
@@ -157,6 +176,7 @@ a
 ```
 
 For sorting numbers:
+
 ```bash
 $ sort -n file.txt
 1
@@ -166,14 +186,17 @@ $ sort -n file.txt
 ```
 
 ## wc
+
 word count
 line counting
 byte counting
 
 ## uptime
+
 tells how long the system has been running.
 
 ## whatis
+
 display one-line manual page description of a command. example
 ```
 $ whatis whatis
@@ -186,8 +209,10 @@ tee (2)              - duplicating pipe content
 ```
 
 ## tee
+
 Read from standard input and write to standard output and files. For example, if we use `ping google.com > file.txt`,  the output will be in file.txt but not in stdout. But with tee, we can get both to stdout and file.txt. Example:
-```
+
+```bash
 $ ping google.com | tee file.txt
 
 or we can even output to multiple files
@@ -196,18 +221,41 @@ $ ping google.com | tee file.txt another.txt
 ```
 
 ## sed
-sed: stream editor for filtering and transforming text. 
+
+Read: https://www.digitalocean.com/community/tutorials/the-basics-of-using-the-sed-stream-editor-to-manipulate-text-in-linux
+
+sed: stream editor for filtering and transforming text.
 
 Example 1 replacing string, [link](https://unix.stackexchange.com/questions/159367/using-sed-to-find-and-replace):
-```
+
+```bash
 sed -i -e 's/before/after/g' hello.txt
 ```
 
 ## awk
-pattern scanning and processing language. huh?
+
+Read: https://www.digitalocean.com/community/tutorials/how-to-use-the-awk-language-to-manipulate-text-in-linux
+
+pattern scanning and processing language.
+
+Pattern:
+
+```bash
+awk '/search_pattern/ { action_to_take_on_matches; another_action; }' file_to_parse
+```
+
+and for the more complete and complex case:
+
+```bash
+awk 'BEGIN {action;} /search_pattern/ {action;} END {action}'
+
+```
+
+`BEGIN` is done before anything. This is the place to change the string separator from space to dash, for example. `END` is done after the action after search pattern is done.
 
 Example 1, printing column of a text [link](https://www.tutorialspoint.com/awk/awk_basic_examples.htm):
-```
+
+```bash
 $ cat file.txt
 1) Amit     Physics   80
 2) Rahul    Maths     90
@@ -224,16 +272,27 @@ Rahul 90
 $ awk 'length($0) > 18' file.txt
 ```
 
+Example 2: print all username in /etc/passwd
+
+FS: the separator.
+
+```bash
+awk 'BEGIN {FS=":"} {print $1}' /etc/passwd
+```
+
 ## read
+
 read input.
 
 Example:
+
 ```bash
 read varname
 echo "Hello $varname"
 ```
 
 ## cut
+
 https://www.thegeekstuff.com/2013/06/cut-command-examples/
 
 `cut -c2 test.txt`  print (like `cat`) but only the 2nd character from each line of the test.txt.
