@@ -10,11 +10,15 @@ A very good course for a reference: https://moodle.epfl.ch/course/view.php?id=52
    2. [udp]
    3. [quic]
 3. Network layer
-   1. [addressing and routing](net_layer.md)
-   2. [NAT and firewall](nat_and_firewall.md)
-   3. [multi tier load balancers (L3, L4, L7, but let's just put it here)](multi_tier_load_balancer.md)
+   1. [addressing](net_layer.md)
+   2. [ospf](ospf.md)
+   3. [bgp](bgp.md)
+   4. [NAT and firewall](nat_and_firewall.md)
+   5. [multi tier load balancers (L3, L4, L7, but let's just put it here)](multi_tier_load_balancer.md)
 4. Layer 2
-   1. [ARP](arp.md)
-   2. [MPLS] TODO
-   5. [GRE] TODO
-6. [Linux networking](linux_networking.md)
+   1. [Switching and VLAN](l2.md)
+   2. [ARP](arp.md)
+   3. [MPLS] TODO
+   4. [GRE] TODO
+5. [Linux networking](linux_networking.md)
+6. [SDN intro](sdn.md)

@@ -1,48 +1,32 @@
-from collections import Counter, OrderedDict
+from collections import Counter
 
 class Solution:
-    def isok(self, s):
-        i = 0
-        j = i + 1
-        while j < len(s):
-            if s[i] == s[j]:
-                return False
-            i += 1
-            j += 1
-        return True
-
     def reorganizeString(self, S: str) -> str:
-        if self.isok(S):
-            return S
-            
-        ctr = []
-        for t in Counter(S).most_common():
-            ctr.append([t[0], t[1]])
-
-        s = ""
-        print(ctr)
-        i = 0
-        j = i + 1
-        while j < len(ctr):
-            if ctr[i][1] <= 0:
-                i = j
-                j = i + 1
-                if j >= len(ctr):
-                    break
-            while ctr[j][1] > 0:
-                s += ctr[i][0] + ctr[j][0]
-                ctr[j][1] -= 1
-                ctr[i][1] -= 1
+        ctr = Counter(S)
+        seq = []
+        
+        for c, n in ctr.items():
+            if n > (len(S) + 1) // 2:
+                return ""
+            seq.extend([c] * n)
+        
+        print(seq)
+        res = [None] * len(S)
+        j = 0
+        for i in range(len(S), 2):
+            res[i] = seq[j]
+            print("%d: %s" % (j, seq[j]))
             j += 1
-
-        if ctr[i][1] > 1:
-            return ""
-        s += ctr[i][0][:ctr[i][1]]
-        return s
-
+        j = len(S) // 2
+        for i in range(1, len(S), 2):
+            res[i] = seq[j]
+            j += 1
+        
+        
+#         res[::2] = seq[:len(S) // 2 + 1]
+#         res[1::2] = seq[len(S) // 2:]
+        print(res)
+        return "".join(res)
+            
 s = Solution()
-# print(s.reorganizeString("vvlo"))
-# print(s.reorganizeString("aaab"))
-# print(s.reorganizeString("aab"))
-# print(s.reorganizeString("cbaa"))
-print(s.reorganizeString("bfrbs"))
+assert s.reorganizeString("aab") == "aba"
