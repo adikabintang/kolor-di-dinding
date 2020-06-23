@@ -107,7 +107,7 @@ To make it unique, we prepend a **Route Distinguisher (RD)** to the IP prefix of
 
 The combination of RD and the IP prefix is called VPNv4 route. The VPNv4 route will be advertised by **Multiprotocol BGP (MP-BGP)**. MP-BGP is an extension of BGP that allows different types of address to be distributed. The UPDATE of MP-BGP has a new Network Layer Reachability Information (NLRI) format that has these attributes: RD, IPv4 prefix, next hop, VPN label.
 
-The RD is just to make sure the route is unique on the table. **Route Target (RT)** is like a tag defines which prefixes get imported and exported on the PE routers. RT is put on the BGP community attribute.
+The RD is just to make sure the route is unique on the table. **Route Target (RT)** is like a tag defines which prefixes get imported and exported on the PE routers. RT is put on the BGP *extended community attribute*.
 
 When a packet from a customer enters the PE router, the ingress PE imports the RT. The egress PE router exports the RT to associate the tag with the customer VRF. Example:
 

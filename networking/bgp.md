@@ -46,11 +46,11 @@ Sources:
    1. OPEN
    2. NOTIFICATION
    3. KEEPALIVE
-   4. UPDATE: contains route modifications, additions, withdrawals
+   4. UPDATE: contains route modifications, additions, withdrawals of prefixes (prefix = Network Layer Reachability Information (NLRI)). Attributes are sent here.
 3. A route is made of:
    1. destination
    2. AS path
-   3. Attributes: things that enables operator control the path selection.
+   3. Attributes: BGP selects the best path based on attributes. More on this later.
       1. Well-known attribute: 
          1. NEXT_HOP, ORIGIN, AS-PATH
       2. Well-known discretionary: 
@@ -66,18 +66,44 @@ Sources:
 
 Model of a BGP router. Image source: Page 19 of https://moodle.epfl.ch/pluginfile.php/2731792/mod_resource/content/1/bgpSols.pdf
 
-4. How the decision process of BGP works (the best path decision) is by seeing these in order:
-   1. Prefer the path with the highest WEIGHT attribute
-   2. Prefer the path with the highest LOCAL_PREF attribute
-   3. Prefer the path with the shortest AS_PATH
-      1. Can be relaxed with router command `bgp bestpath as-path multipath-relax`. Usually done for load balancing.
-   4. Prefer the path with the lowest origin type
-   5. Prefer the path with the lowest multi-exit discrimiator (MED)
-      1. MED is used between ASes over eBGP to tell one provider AS which entry link to prefer.
-   6. Prefer eBGP over iBGP paths
-   7. Prefer the path with the lowest IGP metric to the BGP next hop (shortest path to the NEXT_HOP, according to IGP)
 
-## Redistribution of BGP into BGP
+## BGP Attributes
+
+Source: https://networklessons.com/bgp/bgp-attributes-and-path-selection
+
+As an analogy, IGP selects the path with the lowest metric, e.g., RIP selects the one with the lowest hop count, or OSPF selects the one with the least cost. BGP selects the path based on the attributes.
+
+How the decision process of BGP works (the best path decision) is by seeing these in order:
+
+1. Prefer the path with the highest WEIGHT attribute
+2. Prefer the path with the highest LOCAL_PREF attribute
+3. Prefer the path with the shortest AS_PATH
+   1. Can be relaxed with router command `bgp bestpath as-path multipath-relax`. Usually done for load balancing.
+4. Prefer the path with the lowest origin type
+5. Prefer the path with the lowest multi-exit discrimiator (MED)
+   1. MED is used between ASes over eBGP to tell one provider AS which entry link to prefer.
+6. Prefer eBGP over iBGP paths
+7. Prefer the path with the lowest IGP metric to the BGP next hop (shortest path to the NEXT_HOP, according to IGP)
+
+### BGP Community Attribute
+
+Sources:
+
+- https://networklessons.com/bgp/bgp-communities-explained
+- https://www.networkers-online.com/blog/2008/09/understanding-bgp-communities/
+
+BGP community attribute is some extra value that can be assigned to specific prefix(es) and advertised to other neighbor.
+
+What is "community" by the way? It actually refers to a group of prefixes that should be treated the same way. BGP community attribute is used to mark a set of prefixes that should be treated in a certain same way. For example, providers can use community attribute to apply a common routing policy such as assigning a certain LOCAL_PREF or WEIGHT. To put it simply, BGP community attributes can be used for traffic engineerng and dynamic routing policies.
+
+4 well known BGP communities:
+
+- Internet: advertise to all neighbors
+- no-advertise: don't advertise to any
+- no-export: don't advertise the prefix to any eBGP neighbor
+- local-AS: don't advertise the prefix outside sub-AS (for BGP confederation)
+
+## Redistribution of BGP into IGP
 
 Routes learnt by BGP are passed to IGP. Only routes learnt by eBGP are redistributed into IGP. Some operators avoid this because the routing entries in IGP will be too large.
 
@@ -108,7 +134,7 @@ According to [RFC 4271](https://tools.ietf.org/html/rfc4271#page-96):
 
 2. Private AS number
 
-Private AS number is used within the data center, as it runs eBGP inside [BGP in the data center book](https://www.oreilly.com/library/view/bgp-in-the/9781491983416/)
+Private AS number is used within the data center, as it runs eBGP inside [[BGP in the data center book](https://www.oreilly.com/library/view/bgp-in-the/9781491983416/)].
 
 It is also used for the router that is connected to the provider. For example:
 
@@ -117,7 +143,7 @@ It is also used for the router that is connected to the provider. For example:
 priv ASN         pub ASN
 ```
 
-Provider translate the priv ASN to the ISP's ASN when exporting routes to the outside world. Not all clients need ASN, though. Basically, only transit AS needs ASN.
+Provider translate the private ASN to the ISP's ASN when exporting routes to the outside world. Not all clients need ASN, though. Basically, only transit AS needs ASN.
 
 3. Reducing iBGP peerings
 
@@ -134,7 +160,7 @@ Image source: https://networklessons.com/bgp/bgp-confederation-explained
 
 a. Confederations
 
-The idea of confederation is to have sub-ASes inside AS (confederation = consists of a number of groups united in an alliance).
+The idea of confederation is to have sub-ASes inside AS (confederation = consists of a number of groups united in an alliance). We use Local-AS BGP community attribute to make sure that the prefix not advertised outside sub-AS.
 
 ![confederation](https://cdn.networklessons.com/wp-content/uploads/2014/09/xbgp-confederation-example.png.pagespeed.ic.rhgsax6SPr.webp)
 

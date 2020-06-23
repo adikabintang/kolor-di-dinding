@@ -92,10 +92,6 @@ Inside an area, it's a link state routing. Inter-area is a distance vector. It's
 
 Autonomous System Border Router (ASBR) is the border router that is connected and make an eBGP peer session to another ASBR of different AS network.
 
-## Equal Cost Multipath (ECMP)
-
-When there are multiple same cost route to the same destination, we can have a per-flow load balancing (per-TCP or UDP) flow to avoid the packet re-ordering. Set this in `sysctl` (`sys.net.ipv4.fib_multipath_hash_policy=1`). Read more here: https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt
-
 # A little bit about distance vector routing (like RIP)
 
 - RIP uses bellman-ford algorithm to compute the shortest path.

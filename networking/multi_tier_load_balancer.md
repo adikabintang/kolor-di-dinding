@@ -39,7 +39,7 @@ This architecture aims to mitigate the problems that arise if the BGP router in 
 - Why is it called L4 LB? What does it do with the transport layer?
   - It uses a tuple `(src ip, src port, dst ip, dst port)` for the hash input (remember, port is on L4)
   - See [ip-sysctl](https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt) config to setup (`fib_multipath_hash_policy=1`)
-- The load balancing in the kernel is implemented by [IPVS](http://www.linuxvirtualserver.org/software/ipvs.html). Use kernel > 4.18 to use [Maglev](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/44824.pdf) scheduler (Maglev uses consistent hashing)
+- The transport layer load balancing in the kernel is implemented by [IPVS](http://www.linuxvirtualserver.org/software/ipvs.html). Use kernel > 4.18 to use [Maglev](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/44824.pdf) scheduler (Maglev uses consistent hashing)
 - The frontend for IPVS is [Keepalived](https://www.keepalived.org/)
   - It does some health check with BFD
   - It does a failover with VRRP ([techtarget](https://searchnetworking.techtarget.com/definition/VRRP), [geeksforgeeks](https://www.geeksforgeeks.org/introduction-of-virtual-router-redundancy-protocol-vrrp-and-its-configuration/))
