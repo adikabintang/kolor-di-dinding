@@ -176,7 +176,7 @@ When we `rm` a file, it will unlink the file from the dir structure. But, if the
 
 Source: https://www.slashroot.in/how-does-traceroute-work-and-examples-using-traceroute-command
 
-First of all, remember that there is a TTL field in the IP packet. It gives the maximum number of *hops* it can go through (not time). By default, the TTL is 30. Everytime an IP packet goes through a hop, such as router, the router will decrement by 1. If the TTL field is 1, th router will reply with ICMP message to say to the sender that "TTL exceeded".
+First of all, remember that there is a TTL field in the IP packet (TTL in IPv4, hop limit in IPv6). It gives the maximum number of *hops* it can go through (not time). By default, the TTL is 30. Everytime an IP packet goes through a hop, such as router, the router will decrement by 1. If the TTL field is 1, th router will reply with ICMP message to say to the sender that "TTL exceeded".
 
 See example:
 

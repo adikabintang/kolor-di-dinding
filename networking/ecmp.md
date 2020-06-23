@@ -29,7 +29,7 @@ What is it: see the picture below.
 
 Image source: https://support.huawei.com/enterprise/en/doc/EDOC1100086965
 
-Now, if the ECMP happens at two levels of routers, and the first level and the second level yields the same hash output, it will not be load balanced on the second level. *This results in unevenly load balanced traffic*.
+Now, if the ECMP happens at two levels of routers, and the first level and the second level yields the same hash output, it will not be load balanced on the second level. *This results in an unevenly load balanced traffic*.
 
 In the picture, see the blue and yellow packet. the blue and yellow go to the first 2 egress interface. on the second switch, because the hash yields the same and the number of interfaces are also the same, the packet will go to the first 2 interfaces on the second switch. As a result, the second switch is not really doing the load balancing.
 

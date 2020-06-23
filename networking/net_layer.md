@@ -26,12 +26,17 @@ So, for that question (192.168.0.0/24)
 Sources:
 
 - https://moodle.epfl.ch/pluginfile.php/2710119/mod_resource/content/2/ip1.pdf
+- https://en.wikipedia.org/wiki/IPv6
 
 Advantage of IPv6 over IPv4:
 
 1. IPv4 is 32 bit long, while IPv6 is 128 bit long. IPv6 is very far way from exhaustion
 2. IPv4 requires manual or DHCP for addressing. IPv6 requires manual or autoconfiguration (SLAAC), which is less complex than DHCP.
 3. IPv4 requires NAT to prevent exhaustion, IPv6 does not need it.
+4. IPv6 is faster to process in router. Why:
+   1. In IPv4, there is a checksum. When the router decrement the TTL, the checksum is re-computed.
+   2. In IPv6, there is no checksum. Then hop limit (=IPv4's TTL) is subtracted, the router does not have to re-compute the checksum. IPv6 just relies on checksum by L2 and L4 (checksum header on TCP/UDP) for integrity check.
+5. IPsec is more welcomed: AH and ESP are implemented as IPv6 extension headers.
 
 So why we don't use the IPv6 everywhere? It's because it's not backward compatible to IPv4. Therefore, upgrading requires upgrading all IP-based things in the network, which is too many and very hard.
 
