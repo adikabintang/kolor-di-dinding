@@ -17,6 +17,7 @@ A very good course for a reference: https://moodle.epfl.ch/course/view.php?id=52
    5. [ecmp](ecmp.md) (a little bit to transport layer since it may read the port values)
    6. [multi tier load balancers (L3, L4, L7, but let's just put it here)](multi_tier_load_balancer.md)
    7. [ipsec](ipsec.md)
+   8. [vrrp](vrrp.md)
 4. Layer 2
    1. [Switching and VLAN](l2.md)
    2. [ARP](arp.md)
