@@ -51,3 +51,17 @@ So why we don't use the IPv6 everywhere? It's because it's not backward compatib
       1. ISP assigns the network prefix that the home/office/anything router can delegate to its devices. So to the ISP, the router's network is the network prefix that the ISP gives. this network prefix is the public addresses. So all devices behind the router will have public IPv6 address. But NATs might still be used for isolation: keep local addresses private.
 
 TODO: learn IPv6 https://youtu.be/ck5bR1WlOo0?t=1454
+
+# IP Multicast
+
+Sources:
+
+- https://en.wikipedia.org/wiki/IP_multicast
+- https://networklessons.com/multicast/introduction-to-multicast
+- http://cisco.num.edu.mn/CCNA_R&S1/course/module5/5.1.3.5/5.1.3.5.html#:~:text=As%20with%20the%20unicast%20and,%2D00%2D5E%20in%20hexadecimal.
+
+Multicast is for sending to *some* members (like a group). IPv4 addresses for multicast are 224.0.0.0 to 239.255.255.255.
+
+The receivers form a multicast group. The protocol to join the group is called Internet Group Management Protocol (IGMP).
+
+The MAC address that associates with the IP multicast is 01:00:5e:00:00:00–01:00:5e:7f:ff:ff (remember, broadcast is FF:FF:FF:FF:FF:FF and multicast does not use this). If the switch understands multicast, when receiving a packet with special multicast, the switch will forward to the group. If the router does not understand multicast, it will flood to all interface, and the NIC of the destination that will filter it (if the destination is not the member).
