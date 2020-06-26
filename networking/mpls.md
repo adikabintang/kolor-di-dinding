@@ -82,6 +82,20 @@ MPLS LDP generates and exhanges MPLS labels. The MPLS enabled nodes must be peer
 
 Image source: https://networklessons.com/mpls/mpls-ldp-label-distribution-protocol
 
+### RSVP-TE
+
+Traffic Engineering (TE): the ability to control where and how traffic is routed, independent of best path calculation of routing protocol.
+Reason: prevent congestion, manage capacity, prioritize different services
+
+Two mpls routing protocols: LDP, RVSP-TE
+
+A network can use both: LDP for MPLS VPN, RSVP-TE for traffic engineering feature
+
+![mpls_rsvp_te_ldp](../images/mpls_ldp_rsvp_te.png)
+
+Image source: https://archive.nanog.org/sites/default/files/tuesday_tutorial_steenbergen_mpls_46.pdf
+
+
 # MPLS VPN
 
 Sources:
@@ -139,17 +153,4 @@ int fa0/0
 ```
 
 Read more about RD and RT here: https://ccieblog.co.uk/mpls/difference-between-the-rd-and-rt
-
-------
-
-TE: the ability to control where and how traffic is routed, independent of best path calculation of routing protocol.
-Reason: prevent congestion, manage capacity, prioritize different services
-
-two mpls routing protocols: LDP, RVSP-TE
-
-can use both: LDP for MPLS VPN, RSVP-TE for traffic engineering feature
-
-![mpls_rsvp_te_ldp](../images/mpls_ldp_rsvp_te.png)
-
-Image source: https://archive.nanog.org/sites/default/files/tuesday_tutorial_steenbergen_mpls_46.pdf
 
