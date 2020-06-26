@@ -16,6 +16,11 @@ Sources:
 
 Multiprotocol label switching (MPLS) is a routing technique that is based on short path labels, not the network addresses. It does not involve complex lookups in a routing table.
 
+Why MPLS is used/advantages of MPLS:
+
+- This can be used as the tunnel between two sites. We can also say that the path between these sites is isolated from the other path in the network.
+- We can influence the packet to chooose a certain path (with traffic engineering), independent of IP routing protocol's best path
+
 MPLS operates at the layer between L2 and L3, and often referred to as the L2.5. This is also known as shim header.
 
 How routers know that this packet is MPLS or not? Routers look at the Ethertype field in the Ethernet header. The Ethertypefield defines what protocol it brings. For MPLS, the value for Ethertype field is 0x8847 (and for IPv4 it's 0x0800, and 0x0806 for ARP, etc. See [wiki](https://en.wikipedia.org/wiki/EtherType)). (Not related, just for info: in the IP header, there is a field in the IP header that serves the same purpose: protocol header. That's why introducing a new protocol on top of other protocol might get cumbersome because this the routers might need to recognize this field)
@@ -57,14 +62,25 @@ When the egress LER table receives the packet, it pops the label (MPLS POP opera
 
 The path that the MPLS packet goes through is called the **Label Switched Path (LSP)**. This path is established by Label Distribution Protocol (LDP, a manual and simple version) or RSVP-TE (traffic engineering, a more sophisticated approach). LSP is unidirectional (one way). That means the paths for the packet in and out may be different.
 
-LDP is a protocol for exchanging MPLS labels. LDP is used to build and maintain LSP database, LDP relies on IGP to distribute the labels to neighboring MPLS routers.
+### MPLS LDP
 
-From this example, we see **why MPLS is used/advantages of MPLS:**
+Sources: 
 
-- This can be used as the tunnel between two sites. We can also say that the path between these sites is isolated from the other path in the network.
-- We can influence the packet to chooose a certain path (with traffic engineering), independent of IP routing protocol's best path
+- https://networklessons.com/mpls/mpls-ldp-label-distribution-protocol
+- https://networkengineering.stackexchange.com/questions/38588/rib-vs-fib-differences
+- http://resources.intenseschool.com/mpls-ldp-lib-and-lfib/
 
-Speaking about tunneling...let's talk about MPLS VPN
+LDP is a protocol for generating and exchanging MPLS labels. LDP is used to build and maintain LSP database, LDP relies on IGP to distribute the labels to neighboring MPLS routers.
+
+As an analogy, MPLS LDP builds the forwarding table like other routing protocols (OSPF, BGP, RIP, etc) do. 
+
+Routing protocols, like OSPF, BGP, and so on, is used to exchange prefix and other metrics. These are then calculated for the best path and then the routing table is saved into Routing Information Base (RIB). Use `show ip route` to see RIB. RIB is part of the *control plane*. The information from RIB is used to build the Forwarding Information Base (FIB), which is the table that says "the traffic egress towards IP address X should go through interface ethX". Router forwards packet using FIB. FIB is part of the *forwarding plane*.
+
+MPLS LDP generates and exhanges MPLS labels. The MPLS enabled nodes must be peered. We may need to use IGP so that the MPLS nodes can connect to each other (like iBGP that relies on IGP). The label routing information is collected and saved into Label Information Base (LIB). LIB is part of the *control plane*. LIB is used to build the Label Forwarding Information Base (LFIB). LFIB is part of the *forwarding plane*. MPLS forwards packets using LFIB.
+
+![mpls_ldp_lib](https://cdn.networklessons.com/wp-content/uploads/2015/08/xfib-lfib-cisco.png.pagespeed.ic.ceKHN1yir8.webp)
+
+Image source: https://networklessons.com/mpls/mpls-ldp-label-distribution-protocol
 
 # MPLS VPN
 
@@ -123,4 +139,17 @@ int fa0/0
 ```
 
 Read more about RD and RT here: https://ccieblog.co.uk/mpls/difference-between-the-rd-and-rt
+
+------
+
+TE: the ability to control where and how traffic is routed, independent of best path calculation of routing protocol.
+Reason: prevent congestion, manage capacity, prioritize different services
+
+two mpls routing protocols: LDP, RVSP-TE
+
+can use both: LDP for MPLS VPN, RSVP-TE for traffic engineering feature
+
+![mpls_rsvp_te_ldp](../images/mpls_ldp_rsvp_te.png)
+
+Image source: https://archive.nanog.org/sites/default/files/tuesday_tutorial_steenbergen_mpls_46.pdf
 
