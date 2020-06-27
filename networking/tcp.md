@@ -1,20 +1,3 @@
-https://www.youtube.com/watch?v=8RI9wtmcpeY&feature=youtu.be
-
-https://www.youtube.com/watch?v=tyk2-0MY9p0&feature=youtu.be
-
-troubleshooting tcp: https://youtu.be/15wDU3Wx1h0?t=448
-
-why packets are dropped: https://www.youtube.com/watch?v=7rLROSYcQU8 https://www.youtube.com/watch?v=Z5dsRoFUb9Y
-
-TODO
-
-- What can go wrong with TCP handshake: SYNRECV (TCP syn flood attack)
-- TCP flow control
-- TCP congestion control
-- Segmentation offloading
-- head of line blocking
-- bufferbloat
-
 Sources:
 
 - https://www.youtube.com/watch?v=tyk2-0MY9p0
@@ -42,12 +25,12 @@ Sources:
       4. If BDP > 12500 bytes, it's an LFN 
 4. Amount of data the receiver *says* it can receive: **receive window** (RWND, the value is advertised to the sender periodically)
 5. Amount of data the sender *thinks* it can send: **min(SNDBUF, CWND, RWND, BDP)**
-6. Window size value and window scale (scaling factor) in TCP header (sent when doing the TCP handshake)
+6. Window size value and window scale (scaling factor) is in TCP header (sent when doing the TCP handshake).
 7. Congestion window: **CWND**. 
    1. Maintained by the sender. 
-   2. It's a sender side flow control ased on network conditions and capacity.
+   2. It's a sender side flow control based on network conditions and capacity.
    3. Not sent in TCP. It's a state variable.
-   4. Referred to in *multiples* of MSS (maximum segment size) (exponentially grow)
+   4. Defined as *multiples* of MSS (maximum segment size) (will exponentially grow)
    5. how this increases in TCP slow start for congestion control: 
       1. CUBIC: exponential growth of CWND. When it limits the slow-start threshold (ssthresh), it grows linearly. When there is a packet loss, the CWND drops down (like CWND = CWND / something, this is called back-off)
       2. BBR: like cubic, but instead of multiple of MSS, it's a multiple of BDP (https://blog.apnic.net/2020/01/10/when-to-use-and-not-use-bbr/)
@@ -61,7 +44,7 @@ Sources:
 9. When the throughput is not optimal, do this checklist:
    1. Measure BDP
    2. What is the advertised RWND?
-      1. Is the application taking the data from the receive buffer?
+      1. Is the receiver application taking the data from the receive buffer?
    3. Are the bytes in flight (CWND) increasing and reaching BDP or RWND? If no:
       1. Does the sender stop and wait for ACKs after sending the same amount of data over and over? if yes, send buffer problem
       2. Is there any packet loss (=retransmissions, dup ACKs) that prevents CWND from growing? If yes, there is congestion
@@ -81,7 +64,7 @@ AIMD = Additive-increase, multiplicative-decrease (AIMD)
 
 To sum up:
 
-- Initial CWND = usually 10 * MSS. The CWND grows exponentially everytime an ACK is received.
+- Initial CWND = usually 10 * MSS [[RFC6928](https://tools.ietf.org/html/rfc6928)]. The CWND grows exponentially everytime an ACK is received.
 - When it hits the ssthreshold, it grows linearly. This phase is called congestion avoidance.
 - When there is a packet loss (timeout/duplicate ACK*), the ssthreshold is set to the 3/4 of the prev value, and the CWND is multiplicatively decreased below the ssthreshold.
 
@@ -196,7 +179,7 @@ See the picture here, it's nice: https://http3-explained.haxx.se/en/why-quic/why
 
 Attacker sends SYN, server replies with SYNACK, and the attacker flees. This condition is also known as TCP half open.
 
-The server, upon receiving the SYN, save the Transmission Control Block (TCB) in a struct, a few bytes. It keeps the state. If the attackers flood the server with SYN and does not reply with the ACK after server sends SYNACK, this can deplete the server's resource. When the server does not receive ACK, the server may re-transmit the SYNACK and also set the timeout until it purges that connection.
+Upon receiving the SYN, the server saves the Transmission Control Block (TCB) in a struct, taking a few bytes. TCB keeps the state, such as information about IP address and port of that connection, and so on. If the attackers flood the server with SYN and does not reply with the ACK after server sends SYNACK, this can deplete the server's resource. When the server does not receive ACK, the server may re-transmit the SYNACK and also set the timeout until it purges that connection.
 
 What to do: TCP SYN cookies (see page 58 of https://moodle.epfl.ch/pluginfile.php/2722993/mod_resource/content/0/transportSols.pdf and https://en.wikipedia.org/wiki/SYN_cookies)
 

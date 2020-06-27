@@ -33,9 +33,9 @@ Image source: https://hpbn.co/transport-layer-security-tls/
 7. Client initiates the *key derivation process*. For example, it can use Diffie-Hellman Key Exchange. Given public `g`, public `p`, and secret `a`, the client makes `A = g^a mod p`. `A` is called Pre-master secret key. Client sends the `A`, `MAC(A)`, encrypted with the server public key taken from the server certificate.
    1. At the same time, server with a secret `b` is making `B = g^b mod p`.
 8. Server receives `A`. Server computes the symmetric session key `S = A^b mod P`. Server sends `B` to client.
-9. Client computer the symmetric session key by `S = B^a mod p`
+9. Client computes the symmetric session key by `S = B^a mod p`
 10. All communication in this TLS session is encrypted and MACed using this `S` symmetric session key.
-    1.  TLS 1.3 uses encrypt-then-MAC
+    1. TLS 1.3 uses encrypt-then-MAC
 
 Oversimplification:
 

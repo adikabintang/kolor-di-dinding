@@ -30,7 +30,7 @@ Sources:
 
 Source: https://medium.com/@cloudchef/linux-boot-process-part-1-e8fea015dd66
 
-x86 has operational modes: **real mode** and (then) **protected mode**. Real mode happens when it starts, has access only to the first MB of memory, can access memory and IO unrestricted. Protected mode is when multitasking, paging, protection rings already formed.
+x86 has operational modes: **real mode** and (then) **protected mode**. Real mode happens when it starts, has access only to the first MB of memory, can access memory and IO unrestrictedly. Protected mode is when multitasking, paging, protection rings already formed.
 
 Protection ring: privilege levels (rings). Ring 0-3. Ring 0 is the most privileged, ring 3 is the least. Linux only uses ring 0 and ring 3. Ring 0 is kernel mode, ring 3 is user mode.
 
@@ -64,7 +64,7 @@ Then, it runs **initial ram disk** scheme, which is loading a temporary root fil
 Why do we need initial ram disk?
 
 1. The real root file system may be on RAID (partitioned into several disk) or other complicated things. This makes booting from the disk is more complicated. That's why the initial ram disk mounts the temporary root file system on RAM, just for booting purpose.
-2. Drivers in the kernel are in the form of module (that can be loaded by `modprobe`). Not all drivers are loaded in the first place, because it would be too large. When doing initial ram disk, initdr runs `/linuxrc` (initramfs runs `/init`) to find the needed module and load them. 
+2. Drivers in the kernel are in the form of module (that can be loaded by `modprobe`). Not all drivers are loaded in the first place, because otherwise the kernel would be too large. When doing initial ram disk, initrd runs `/linuxrc` (initramfs runs `/init`) to find the needed module and load them. 
 
 After the `kernel_init()` finishes, it enters **init process**, implemented by **systemd**. The systemd checks the root file system, checks and mounts additional file systems, initialize network cards, start many daemons, sets getty on the terminals for user to use the shell.
 

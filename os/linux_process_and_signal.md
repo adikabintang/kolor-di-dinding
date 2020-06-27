@@ -53,7 +53,9 @@ int main()
 A call to `system()` is not so flexible.
 
 ## C Program: make a new process with exec()
-`exec` hands off execution of the running program to another. *The original program will no longer running after the new one is started*.
+
+`exec` hands off execution of the running program to another. *The original program will no longer run once the new one starts*.
+
 ```c
 int main()
 {
@@ -63,6 +65,7 @@ int main()
 ```
 
 ## C Program: make a new process with fork and execv
+
 ```c
 int main()
 {
@@ -123,7 +126,7 @@ int main() {
 }
 ```
 
-When a children exits, it sends a `SIGCHLD` signal to the parent. The parent can call wait inside the signal handler. Example of handler:
+When a child exits, it sends a `SIGCHLD` signal to the parent. The parent can call wait inside the signal handler. Example of handler:
 
 ```c
 void handler(int sig)
@@ -179,7 +182,7 @@ They are SIGKILL, SIGINT, SIGTERM, SIGQUIT, SIGHUP. SIGKILL never fails to kill 
 
 ## SIGINT
 
-`Ctrl + c` is one way to send this `kill -s SIGINT pid`. It says: "stop what this process is doing now and wait for further user input".
+Send SIGINT by `Ctrl + c` or `kill -s SIGINT $PID`. It says: "stop what this process is doing now and wait for further user input".
 
 It's the weakest signal to kill a process.
 
@@ -209,4 +212,4 @@ Source: https://www.tecmint.com/strace-commands-for-troubleshooting-and-debuggin
 
 `strace` captures and records all system calls made by a process and the signals received by the process.
 
-For example, to see what system calls a program `df` calls, we can use `strace ls -h`
+For example, to see what system calls a program `ls` calls, we can use `strace ls -h`
