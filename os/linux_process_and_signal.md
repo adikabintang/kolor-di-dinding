@@ -83,6 +83,8 @@ int main()
 }
 ```
 
+We can see the process tree (the parent to it's children by running `pstree -p -s $PID`. The parent includes `init`).
+
 ## Zombie Process
 
 Read:
