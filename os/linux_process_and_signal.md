@@ -85,7 +85,16 @@ int main()
 
 ## Zombie Process
 
-Zombie process happens when child has finished its execution, but the parent has not or does not call `wait` or send `SIGCHLD` signal to the child.
+Read:
+
+- https://stackoverflow.com/questions/16944886/how-to-kill-zombie-process
+- https://askubuntu.com/questions/111422/how-to-find-zombie-process
+- https://www.geeksforgeeks.org/zombie-and-orphan-processes-in-c/
+- https://en.wikipedia.org/wiki/Child_process
+- https://gist.github.com/leehambley/5589953
+
+Zombie process happens when child has finished its execution, but the parent has not (because blocked) or does not call `wait()`.
+
 
 As the child process has died, it does not consume much resource. However, it's still on the process table. How to see:
 
@@ -95,14 +104,54 @@ ps aux | grep Z
 
 The number of PID is limited. If zombie process takes all of the available unique PID, the system cannot launch new process.
 
-How to remove zombie process:
+How to remove zombie process: the parent must call `wait()` or the parent process must be killed.
 
-1. `parent` must call `wait`
-2. Send SIGCHLD signal: `kill -s SIGCHLD child_pid`
+Example of how a zombie is created:
+
+```c
+int main() {
+    pid_t pid = fork();
+    if (pid > 0) {
+        printf("parent");
+        sleep(3600);
+    }
+    else {
+        printf("I am a child. Finishing...");
+    }
+}
+```
+
+When a children exits, it sends a `SIGCHLD` signal to the parent. The parent can call wait inside the signal handler. Example of handler:
+
+```c
+void handler(int sig)
+{
+    pid_t pid;
+    pid = wait(NULL);
+    printf("Pid %d exited.\n", pid);
+}
+
+int main() {
+    signal(SIGCHLD, handler);
+}
+```
 
 ## Orphan Process
 
-Orphan process is a child process which is still running but the parent has died. When orphan process died, it will not become zombie since `init` process `wait` for it.
+Orphan process is a child process which is still running but the parent has died. When orphan process died, just ignore it since `init` process `wait` for it.
+
+```c
+int main() {
+    pid_t pid = fork();
+    if (pid > 0) {
+        printf("parent, finishing...");
+    }
+    else {
+        printf("I am a child");
+        sleep(3600);
+    }
+}
+```
 
 ## Limiting number of forks
 
@@ -112,7 +161,7 @@ sources:
 - https://unix.stackexchange.com/questions/118617/how-to-limit-the-number-of-process-that-a-user-can-create
 - https://stackoverflow.com/questions/29605502/maximum-number-of-children-processes-on-linux
 
-Unlimited number of forks can cause [*fork bomb*](https://en.wikipedia.org/wiki/Fork_bomb#:~:text=In%20computing%2C%20a%20fork%20bomb,system%20due%20to%20resource%20starvation.): a DoS attack that crashes apps due to a resource starvation.
+Unlimited number of forks can cause [*fork bomb*](https://en.wikipedia.org/wiki/Fork_bomb#:~:text=In%20computing%2C%20a%20fork%20bomb,system%20due%20to%20resource%20starvation.): a DoS attack that crashes apps due to resource starvation.
 
 Limit to the current terminal session: `sudo ulimit -n THE_NUMBER`
 
