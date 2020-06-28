@@ -17,7 +17,7 @@ Sources:
 
 ## Link state protocol: OSPF
 
-1. OSPF is a link state routing protocol: it calculates the "link state" os the metric for shortest path selection. RIP, on the other hand, is a distance-vector routing which calculates the number of hops as the metric.
+1. OSPF is a link state routing protocol: it calculates the "link state" as the metric for shortest path selection. Link state is static (the bandwidth capacity of the link), not the dynamic, actual state of the link at a time. RIP, on the other hand, is a distance-vector routing which calculates the number of hops as the metric.
 2. OSPF operates by exchanging Link State Advertisement (LSA)
 3. The LSA is kept in a Link State Database (LSDB). The LSDB is the same in all routers.
 4. All routers have a full picture of the topology. Therefore, it does not scale for a large network.
@@ -30,9 +30,9 @@ The main steps in OSPF:
 
 **1. Become neighbors:**
 
-- To become neighbors, routers send `hello` packets bringing the router ID. The router ID looks like an IPv4 address, but it't not IPv4 address. It can be configured manually or it will take the loopback address as the ID or the higher UP IP address if no loopback set.
-  - `hello` message is used to discover neighboring routers and detecting failures.
-- Select Designated Router (DR) and Backup DR (BDR). If there is an event from any router, by default, every router that receives the advertisement will broadcast the received advertisement. If there is DR, only DR will re-advertise it, preventing from flooding the network.
+- To become neighbors, routers send `hello` packets bringing the router ID. The router ID looks like an IPv4 address, but it's not IPv4 address. It can be configured manually or it will take the loopback address as the ID or the highest up IP address if no loopback is set.
+  - `hello` message is used to discover neighboring routers and detect failures.
+- Select Designated Router (DR) and Backup DR (BDR). If there is an event from any router, by default, every router that receives the advertisement will broadcast the received advertisement. If there is DR, only DR will re-advertise it, preventing routers from flooding the network.
 - When two routers become neighbhors, they *synchronize* their LSDB.
 
 **2. Exhange LSDB info:**
@@ -58,13 +58,13 @@ cost = reference bandwidth / interface bandwidth
 default reference bandwith = 10^5 Kbps
 ```
 
-For example, the FastEthernet bw is 10^5 Kbps and the Ethernet is 10^4 Kbps. The cost of FastEthernet is 1 and the Ethernet's is 10. FastEthernet is smaller, meaning it's a more economical path (faster).
+For example, the FastEthernet bw is 10^5 Kbps and the Ethernet is 10^4 Kbps. The cost of FastEthernet is 1 and the Ethernet's is 10. FastEthernet is smaller, meaning it's a more economical path (faster). OSPF chooses a path with the smallest cost.
 
 If the OSPF network is too large, it can cause problems:
 
 1. Big LSDB, takes up space
 2. Big routing table, slow
-3. Too much LSA, flooding the network and too often re-calculating best path
+3. Too much LSA, flooding the network and makes re-calculation of best path too often
 
 **How to manage large OSPF network: Multi-area OSPF.**
 
@@ -109,11 +109,11 @@ Sources:
 R1 ----- R2 --x--R3
 ```
 
-Before R2-R3 is broken, R2 knows it can go to R3 with cost of 1 and R1 to R3 with cost of 2. Then, R2-R3 is down. Before R2 advertises this, R2 receives an advertisement from R1 saying that R1 knows how to get to R3 with cost of 2. Since R2-R1's cost is 1, R2 will think that it can go to R3 with cost of 3 via R1. Then, R2 advertises R2-R3 cost is 3 to R1. And it continues to infinity.
+Before R2-R3 is broken, R2 knows it can go to R3 with a cost of 1 and R1 to R3 with a cost of 2. Then, R2-R3 is down. Before R2 advertises this, R2 receives an advertisement from R1 saying that R1 knows how to get to R3 with a cost of 2. Since R2-R1's cost is 1, R2 will think that it can go to R3 with a cost of 3 via R1. Then, R2 advertises R2-R3 cost is 3 to R1. And it continues to infinity.
 
 ### Mitigation
 
-1. Route poisoning: telling all nodes *immediately* when a link is down that the link is down. How to tell? In RIP, the max hop count is 15, so just tell that the failed link hop count to 16.
-2. **Split horizon**: prevents loop by prohibiting a router from advertising a route back onto the interface from which the route was learned. S on the example above, R1 does not advertise the route to R3 to R2.
+1. Route poisoning: telling all nodes *immediately* when a link is down that the link is down. How to tell? In RIP, the max hop count is 15, so just tell that the failed link hop count to 16, which will invalidate the route.
+2. **Split horizon**: prevents loop by prohibiting a router from advertising a route back onto the interface from which the route was learned. So on the example above, R1 does not advertise the route to R1-R3 to R2 because R1 learned the R1-R3 route from R2.
 
 RIP combines route poisonong, split horizon, and holddown timer. Holddown timer starts when the link is down. When the timer is still running, all advertisement about the link to the router is ignored, unless if it comes from the router that used to be down.
