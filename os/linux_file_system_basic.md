@@ -94,7 +94,7 @@ The diagram looks like this:
 
 Source: https://stackoverflow.com/a/29786294/10522825
 
-When the file is removed, the `hard` still has its value. The `soft` is broken. This is because the soft link points to the file. So when the file is deleted, the link is broken. Hard link has the same inode as the original file. When you do update to the original file, the hard link will also be updated. The bits of the file will be removed from the disk when the reference counter in the inode is 0. So if we delete the original file but the hard link still exists, the reference counter in the struct inode will still be > 0. That's why the bits of file still exists on disk.
+When the file is removed, the `hard` still has its value. The `soft` is broken. This is because the soft link points to the file. So when the file is deleted, the link is broken. Hard link has the same inode as the original file. When you do update to the original file, the hard link will also be updated. The bits of the file will be removed from the disk when the reference counter in the inode is 0. So if we delete the original file, it just decrements the reference counter in the struct inode. As long as the reference counter is > 0, the file still exists on the disk. That's why the bits of file still exists on disk.
 
 Refer to the [troubleshooting guide](troubleshooting_guide.md) for troubleshooting disk full because of inodes.
 
