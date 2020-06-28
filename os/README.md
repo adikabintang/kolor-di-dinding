@@ -15,7 +15,8 @@ All you see here is just my reading notes.
    2. [docker](docker_for_dummies.md)
    3. network virtualization: TODO
 8. Misc:
-   1. [(extremely oversimplified) compiler](how_compiler_works_from_1000_miles.md)
-   2. [Linux commands](linux_command.md)
-   3. Kernel maps: https://makelinux.github.io/kernel/map/
-   4. OSTEP book: http://pages.cs.wisc.edu/~remzi/OSTEP/
+   1. [Common troubleshooting: Linux and Networking](troubleshooting_guide.md)
+   2. [(extremely oversimplified) compiler](how_compiler_works_from_1000_miles.md)
+   3. [Linux commands](linux_command.md)
+   4. Kernel maps: https://makelinux.github.io/kernel/map/
+   5. OSTEP book: http://pages.cs.wisc.edu/~remzi/OSTEP/
