@@ -18,13 +18,26 @@ Image source: https://access.redhat.com/documentation/en-us/red_hat_enterprise_l
 
 Image source: https://www.fir3net.com/UNIX/Linux/the-journey-of-a-frame-through-a-linux-based-system.html
 
+**Ingress:**
+
 1. NIC receives the frame
-2. The frame is moved to the RAM with DMA
+2. The frame is moved to the RX ring buffer in kernel memory with DMA
 3. NIC raises hardware interrupt to the CPU
-4. The hardware interrupt handler runs device driver and triggers a software interrupt
-5. The software interrupt handler places the frame to a kernel data structure `sk_buff` (socket buffer)
-6. The packet is passed to the receive socket buffer
+4. NIC driver handles the hardware interrupt. The interrupt handler *clear*s (like clear bit interrupt) the IRQ, meaning acknowledges the IRQ to the NIC. Then, it fires a software interrupt.
+5. The software interrupt handler places the frame to a kernel data structure `sk_buff` (socket buffer). In this context, the kernel removes the frame from NIC hardware buffer.
+6. The packet is passed to the receive socket buffer `sk_buff`
 7. Application calls a syscal such as `read()` or `recv()` or `recvfrom()` to read the data in the socket.
+
+**Egress:**
+
+- Application `write()` on socket
+- Frame is copied from user space to kernel space send socket buffer
+- Frame is inserted into the output queue `qdisc`
+- The frame is enqueue from th qdisc and moved into TX ring buffer
+- The device driver invokes the NIC DMA engine to transmit the frame
+- When the transmission finishes, the device resise a hardware interrupt to signal transmit completion
+- NIC driver interrupt handler triggers a software interrupt
+- software interrupt handler unmap DMA regions and frees the data
 
 # Troubleshooting
 
@@ -76,14 +89,14 @@ A very rough idea of how the system receive packets:
 Socket receive buffer size is in `net.ipv4.tcp_rmem`, and the write buffer is in `net.ipv4.tcp_wmem`. Both can be seen by:
 
 ```bash
-sysctl -a | egrep "tcp_(r|w)mem"
+sysctl -a | egrep "tcp_[r|w]mem"
 ```
 
 ## Socket Receive Buffer
 
 ### Collapsing
 
-Collapsing: when the kernel socket buffer is nearing its' max size, the kernel tries to identify segment in the buffer that has identical metadata, and tries to combine them, so as to not have identical metadata filling up the buffer.
+Collapsing: when the kernel socket buffer is close to its' max size, the kernel tries to identify segment in the buffer that has identical metadata, and tries to combine them, so as to not have identical metadata filling up the buffer.
 
 ### Pruning
 
