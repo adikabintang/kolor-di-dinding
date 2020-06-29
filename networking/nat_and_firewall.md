@@ -22,7 +22,7 @@ client --> router -------> server
 
 Client (src ip: 192.168.1.2, src port: 8897) sends a HTTP request to a server (dst ip: 87.63.11.56, dst port: 80).
 
-The router performs PAT by masquerading the private client IP address to the public IP address. PAT typically used in home setting.
+The router performs PAT by masquerading the private client IP address to the public IP address. PAT is typically used in home setting.
 
 For example, if the router's public IP address is 67.78.89.90, the router will masqueared the packet from src (192.168.1.2:8897) to (67.78.89.90:8897). The port stays the same, unless it's already used by another host in the local network. If it's already used, the router will choose the next available port.
 

@@ -14,7 +14,7 @@ Sources:
 
 Image source: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/performance_tuning_guide/s-network-packet-reception
 
-![net_receive_2](https://www.fir3net.com/images/articles/Linux_Network_Stack_1.png)
+![another_net_linux](https://www.fir3net.com/images/articles/Linux_Network_Stack_1.png)
 
 Image source: https://www.fir3net.com/UNIX/Linux/the-journey-of-a-frame-through-a-linux-based-system.html
 
@@ -31,6 +31,7 @@ Image source: https://www.fir3net.com/UNIX/Linux/the-journey-of-a-frame-through-
 Packets start to drop. What happens?
 
 Problems could be in:
+
 - NIC
 - Soft interrupt issued by device driver
 - Kernel

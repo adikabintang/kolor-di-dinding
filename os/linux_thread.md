@@ -28,7 +28,7 @@ image source: http://outofsync.net/wiki/index.php?title=Monitoring_linux_system_
 
 # Models for threaded programs:
 
-1. Manager-worker: manager takes input, assign work to workers. The workers can be in form of a thread pool.
+1. Manager-worker: manager takes input, assign work to workers. The workers can be taken from a thread pool.
 2. Pipeline: a task is broken down into pieces, each piece is done by a thread.
 3. Peer: like manager-worker but the manager works too.
 
@@ -37,7 +37,7 @@ image source: http://outofsync.net/wiki/index.php?title=Monitoring_linux_system_
 - Mutex is used to synchronize threads and to protect shared data when multiple writes occur.
 - This prevents a **race condition**.
 - Usually it is used to update a global variable
-- The variable that is accessed/written by multiple threads are called "critical section".
+- The region/area between mutex lock and unlock is called "critical section"; only one thread can do it at a time.
 - Flow of the use of mutex:
   - Create and initialize a mutex variable
   - Several threads attempt to lock the mutex

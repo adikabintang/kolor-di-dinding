@@ -6,7 +6,7 @@ Sources:
 - https://docs.cumulusnetworks.com/cumulus-linux-41/Layer-3/Equal-Cost-Multipath-Load-Sharing-Hardware-ECMP/
 - https://support.huawei.com/enterprise/en/doc/EDOC1100086965
 
-When there are multiple same cost route to the same destination, we can have a per-flow load balancing (per-TCP or UDP) flow to avoid the packet re-ordering. Set this in `sysctl` (`sys.net.ipv4.fib_multipath_hash_policy=1`). Read more here: https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt
+When there are multiple same cost routes to the same destination, we can have a per-flow load balancing (per-TCP or UDP flow) flow to avoid the packet re-ordering. Set this in `sysctl` (`sys.net.ipv4.fib_multipath_hash_policy=1`). Read more here: https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt
 
 The idea is something like:
 

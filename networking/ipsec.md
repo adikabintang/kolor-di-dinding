@@ -12,6 +12,8 @@ Sources:
 - https://community.cisco.com/t5/security-documents/how-does-nat-t-work-with-ipsec/ta-p/3119442#:~:text=Devices%20exchange%20two%20NAT%2DD,match%20a%20NAT%20device%20exists.&text=ESP%20packet%20will%20be%20encapsulated%20inside%20a%20UDP%2F4500%20packet.
 - https://en.wikipedia.org/wiki/NAT_traversal
 
+IPsec...
+
 - Security at the network layer
 - Internet Key Exchange (IKE) is the protocol for key establishment (Security Association (SA) setup)
 
@@ -23,7 +25,7 @@ Source: KTH EP2500 Networked System Security (2019)
 
 Transport mode provides a secure connection between 2 endpoint. For VPN, it's for client-to-site VPN. Transport does not add a new IP header.
 
-Tunnel mode brings the whole packet into a tunnel (that's why there is new IP header prepended, and the src IP and dest IP can be different). This is typically used for site-to-site VPN.
+Tunnel mode brings the whole packet into a tunnel (that's why there is a new IP header prepended, and the src IP and dest IP can be different). This is typically used for site-to-site VPN.
 
 Example of site-to-site:
 
