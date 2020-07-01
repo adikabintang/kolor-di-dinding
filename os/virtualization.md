@@ -11,7 +11,7 @@ Sources:
 
 # Virtualization basics
 
-1. Hypervisor easy definition: software that creates and runs VM
+1. Hypervisor, the easy definition: software that creates and runs VM
    1. Hypervisor is also known as Virtual Machine Monitor (VMM)
 2. Types:
    1. Type 1: for bare metal. Example: Xen, KVM

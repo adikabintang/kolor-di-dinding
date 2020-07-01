@@ -30,7 +30,7 @@ Load average is the average number of processes that waits for CPU time. The les
 
 - `n zombie`
 
-Number of zombie process. Kill zombie process with `kill -s SIGCHLD pid`. They actually do not slow things down, but they can take the available PID number available.
+They actually do not slow things down, but they can take the available PID number available. The main process that creates this zombie is the real problem. It might be buggy. To see who is the parent of this zombie, see the process tree by running `pstree -p -s $ZOMBIE_PID`.
 
 - `%Cpu(s):  5.0 us,  2.3 sy,  0.0 ni, 90.7 id,  0.8 wa,  0.7 hi,  0.4 si,  0.0 st`
 
@@ -176,7 +176,7 @@ When we `rm` a file, it will unlink the file from the dir structure. But, if the
 
 Source: https://www.slashroot.in/how-does-traceroute-work-and-examples-using-traceroute-command
 
-First of all, remember that there is a TTL field in the IP packet (TTL in IPv4, hop limit in IPv6). It gives the maximum number of *hops* it can go through (not time). By default, the TTL is 30. Everytime an IP packet goes through a hop, such as router, the router will decrement by 1. If the TTL field is 1, th router will reply with ICMP message to say to the sender that "TTL exceeded".
+First of all, remember that there is a TTL field in the IP packet (TTL in IPv4, hop limit in IPv6). It gives the maximum number of *hops* it can go through (not time). By default, the TTL is 30. Everytime an IP packet goes through a hop, such as router, the router will decrement by 1. If the TTL field is 1, the router will reply with ICMP message to say to the sender that "TTL exceeded".
 
 See example:
 

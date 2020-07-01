@@ -35,7 +35,7 @@ MemoryLimit=400K
 
 Docker shares the kernel with host OS. Then how docker can have its own root filesystem, network drivers, etc? It uses Linux Namespace for isolation.
 
-Namespace kinds:
+Namespace types:
 
 - mnt namespace: provides root filesystem (think of chroot)
 - pid namespace: process within that cgroup only sees itself and the children

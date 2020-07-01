@@ -41,4 +41,4 @@ Example of application:
 
 In a data center, everytime a new VM instance is created, it triggers a software for automation. This software speaks to SDN controller to configure the network so that this VM instance can operate. The things that it can ask might be adding IP address to the instance, advertising route for this VM, setting VLAN for this machine, etc.
 
-One of th most popular SDN controller framework is OpenDaylight. On the southbound, OpenDaylight supports OpenFlow. It also supports RESTConf for the northbound itnerface. We can use mininet to experiment with it [TODO].
+One of the most popular SDN controller framework is OpenDaylight. On the southbound, OpenDaylight supports OpenFlow. It also supports RESTConf for the northbound itnerface. We can use mininet to experiment with it [TODO].

@@ -16,7 +16,7 @@ sshd - 31 - jeritan hatiku
 To get all the lines with ID >= 30, we can use `awk`:
 
 ```bash
-awk 'BEGIN {FS=" - "} $2 >= 30 {print $2}' process.log
+awk 'BEGIN {FS=" - "} {if ($2 >=30) print $2;}' process.log
 ```
 
 Read [awk notes](../../../os/linux_command.md#awk) for more info.
@@ -67,7 +67,7 @@ Jun 19 12:39:32 tongli
 Jun 19 12:40:09 sozis
 ```
 
-The `-n` to print only the pattern is found (sed by default will print all lines in the file). The `$` means "til the end", just like what `$` means in regex. `p` is the print command.
+The `-n` to print only if the pattern is found (sed by default will print all lines in the file). The `$` means "til the end", just like what `$` means in regex. `p` is the print command.
 
 Refer to the [DigitalOcean](https://www.digitalocean.com/community/tutorials/the-basics-of-using-the-sed-stream-editor-to-manipulate-text-in-linux) for more info.
 
@@ -108,9 +108,14 @@ Log example:
 67.164.164.165 - - [24/Jul/2017:00:34:15 +0000] “GET /info.php HTTP/1.1” 200 1543 “-” “Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36”
 ```
 
-- Match the IP address: `[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+`
+- Match the IP address: `[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}` (this...is not exactly right though)
 - Count the number of IP addresses with uniq (must be sorted (reversed) first): `grep ... | sort -r | uniq -c`
 - Wanna put the most frequent one? Use `sed -n "1p"`
 
-Example: `grep -oE "([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)" nginx_access_sample.log | sort -r | uniq -c | sed -n "1p"`
+Example: `grep -oE "([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})" nginx_access_sample.log | sort -r | uniq -c | sed -n "1p"`
 
+Correct IP address regex:
+
+```
+(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])
+```

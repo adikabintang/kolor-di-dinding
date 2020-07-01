@@ -65,6 +65,7 @@ locate main.c (will look every file containing main.c, like `grep main.c`)
 https://www.thegeekstuff.com/2009/03/15-practical-unix-grep-command-examples/ 
 
 Examples:
+
 ```bash
 $ cat demo_file
 THIS LINE IS THE 1ST UPPER CASE LINE IN THIS FILE.
@@ -110,6 +111,11 @@ Two lines above this line is empty.
 $ grep -w "word" file
 ```
 
+```bash
+# count occurrence
+grep -c "word" file
+```
+
 ## tail
 
 Follow: `-f`
@@ -137,7 +143,7 @@ Special mode:
 
 **setgid**: executable file with the setgid can be executed with the privileges of the file's group. `chmod 2xxx file` or `chmod g+s file`.
 
-**sticky bit**: when a directory's sticky bit is set, the filesystem treats the files in such directories in a special way so that *only the file owner's, dir owner's, or root can rename/delet the file*. Example: `/tmp` folder. `chmod 1xxx file`.
+**sticky bit**: when a directory's sticky bit is set, the filesystem treats the files in such directories in a special way so that *only the file owner's, dir owner's, or root can rename/delete the file*. Example: `/tmp` folder. `chmod 1xxx file`.
 
 ## du
 
@@ -232,6 +238,14 @@ Example 1 replacing string, [link](https://unix.stackexchange.com/questions/1593
 sed -i -e 's/before/after/g' hello.txt
 ```
 
+- `-i` is for in place
+- `s` is for "substitute"
+- `g` is for global: substitute all `before` to `after`. Without it, only the first match on the line will be replaced
+- Match 2 matches per line: `s/before/afer/2`
+- Case insensitive: `s/before/after/i`
+- Combination of "case insensitive and all occurrences": `s/before/after/ig`
+- Take the matched word with `&`. For example, change all `before` to `{before}`: `'s/before/{&}/'` 
+
 ## awk
 
 Read: https://www.digitalocean.com/community/tutorials/how-to-use-the-awk-language-to-manipulate-text-in-linux
@@ -280,6 +294,40 @@ FS: the separator.
 awk 'BEGIN {FS=":"} {print $1}' /etc/passwd
 ```
 
+Example 3: Number of fields with `NF`
+
+```bash
+awk '{print NF}' file.txt
+awk '{if (NF < 4) print "man this is less than 4: " $1;}' file.txt
+```
+
+In the `if`, the logical operator is the same as in C (like `&&`, `||`).
+
+```bash
+$ cat file.txt
+A 25 27 50
+B 35 37 75
+C 75 78 80
+D 99 88 76
+
+$ awk '{if ($2 >= 50 && $3 >= 50 && $4 >= 50) print $1" : Pass"; \
+    else print $1" : Fail";}' file.txt
+A : Fail
+B : Fail
+C : Pass
+D : Pass
+
+$ awk '{x = ($2 + $3 + $4) / 3; if (x >= 80) print $0 " : A"; \
+    else if (x < 80 && x >= 60) print $0" : B"; \
+    else if (x < 60 && x >= 50) print $0" : C"; \
+    else print $0" : FAIL";}' file.txt
+
+A 25 27 50 : FAIL
+B 35 37 75 : FAIL
+C 75 78 80 : B
+D 99 88 76 : A
+```
+
 ## read
 
 read input.
@@ -316,12 +364,14 @@ nginx
 ```
 
 ## tr
+
 https://www.geeksforgeeks.org/tr-command-in-unix-linux-with-examples/
 
-tr stands for translage. tr is for translating and deleting characters.
+tr stands for translate. tr is for translating and deleting characters.
 
 Syntax:
-```
+
+```bash
 tr [OPTION] SET1 [SET2]
 
 OPTION:
@@ -332,16 +382,19 @@ OPTION:
 ```
 
 Example 1: how to convert lower case to upper case
+
 ```bash
 echo "Budj" | tr "[a-z]" "[A-Z]"
 ```
 
 Example 2: translate white-space to tabs
+
 ```bash
 echo "dewa budjana" | tr "[:space:]" '\t'
 ```
 
-Example 3: tranlate braces to parenthesis
+Example 3: translate braces to parenthesis
+
 ```bash
 echo "{dewa} budjana" | tr '{}' '()'
 or
@@ -349,20 +402,24 @@ tr '{}' '()' file.txt
 ```
 
 Example 4: delete specified char using -d
+
 ```bash
 echo "hyang giri" | tr -d 'g' # otuput: hyan iri
 echo "dafuq 123" | tr -d "[:digit:]" # output: dafuq
 ```
 
 Example 5: complement the sets using -c options
+
 ```bash
 echo "dafuq 123" | tr -cd "[:digit:]" # output: 123
 ```
 
 ## uniq
+
 `uniq` = unique.
 
 Examples:
+
 ```bash
 $ cat file.txt
 wanjir
@@ -416,46 +473,54 @@ telnet geekflare 443
 ```
 
 ## netstat
+
 Print network connections, routing tables, interface statistics, masquerade connections, and multicast memberships.
 
 Review network connection and open sockets.
 
 Examples:
+
 ```bash
 # display routing table
-netstate -r
+netstat -r
 
 # display network services
-netstate -i
+netstat -i
 
-# continuous monitorign
+# continuous monitoring
 netstat -c
 
 # see tcp connections
 netstat -t
 
 # see udp conn
-netstate -u
+netstat -u
 
 # see state LISTENING
-netstate -L
+netstat -L
 
 # practical use
-netstate -tulpn # p: display programe name, n: numeric
+netstat -tulpn # p: display programe name, n: numeric
 ```
 
 ## lsof
+
 lsof lists the open files associated with an application. Example:
+
 ```bash
 lsof -i tcp:80
 ```
 
 ## nmap
+
 check opened ports. port scanner.
 
 # Loop, Conditional, etc
+
 ## Loops
+
 Example 1:
+
 ```bash
 for i in {1..4}
 do
@@ -470,6 +535,7 @@ done
 ```
 
 Example 2:
+
 ```bash
 for i in {0..4..2}
 do 
@@ -483,10 +549,11 @@ done
 ```
 
 Example 3:
+
 ```bash
 for file in server.cpp plain.zip
 do
-	wc $file
+    wc $file
 done
 
 # output:
@@ -495,7 +562,9 @@ done
 ```
 
 ## Conditional
+
 Example 1:
+
 ```bash
 var="kancut"
 if [ "$var" = "abc" ]; then
@@ -506,6 +575,7 @@ fi
 ```
 
 Example 2:
+
 ```bash
 x=0
 y=1
@@ -523,6 +593,7 @@ fi
 ```
 
 Example 3:
+
 ```bash
 name="jeff beck"
 # check if it's an empty string
@@ -537,6 +608,7 @@ fi
 ```
 
 Example 4:
+
 ```bash
 file_1="server.cpp"
 file_2="one.cpp"
@@ -544,7 +616,7 @@ dir_1="cpp"
 dir_2="catch2"
 
 if [ -f "$file_1" ]; then
-	echo "$file_1 exists"
+    echo "$file_1 exists"
 fi
 
 if [ -f "$file_2" ]; then
@@ -565,7 +637,9 @@ fi
 For other than `-f` and `-d`,  see: http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_07_01.html 
 
 ## Arithmethic Operations
+
 Example:
+
 ```bash
 x=2
 y=9
@@ -580,9 +654,11 @@ i=0
 ```
 
 ## Array
+
 Examples: https://www.thegeekstuff.com/2010/06/bash-array-tutorial/
 
 Example 1:
+
 ```bash
 unix[0]='Debian'
 unix[1]='Fedora'
@@ -591,6 +667,7 @@ echo ${unix[1]} # output: Fedora
 ```
 
 Example 2: `declare -a` declares an array
+
 ```bash
 declare -a unix=('Debian' 'Fedora')
 
@@ -609,16 +686,20 @@ echo ${Unix[@]:3:2} # output: Suse Fedora
 ```
 
 ## Get return status of last executed command
+
 Syntax: `?`
 
 Example:
+
 ```bash
 ls # assume ls runs successfully 
 echo $? # print 0 (return value of success status)
 ```
 
 ## to uppercase and to lowercase
+
 Example:
+
 ```bash
 var="aLaY"
 echo ${var,,} # to lowercase
@@ -626,6 +707,7 @@ echo ${var^^} # to uppercase
 ```
 
 ## 2>&1
+
 https://stackoverflow.com/questions/818255/in-the-shell-what-does-21-mean
 
 https://www.brianstorti.com/understanding-shell-script-idiom-redirect/ 
@@ -637,6 +719,7 @@ File descriptor 2 is the `stderr`.
 `2>&1` means "redirect the `stderr` to the same place we are redirectering the `stdout`".
 
 Example:
+
 ```bash
 $ ./main.out > output.txt 2>&1 # this will save stderr and stdout output to output.txt, but nothing appears on screen
 
