@@ -15,6 +15,8 @@ All in a router/switch: control plane, data plane management plane.
 - Data plane: forward packet, dropping traffic (because of access lists with netfilter, for example)
 - Management plane: telnet/ssh to provide CLI, SNMP, Netconf
 
+In other words, control plane is the logic for controlling forward behavior. Data plane forwards traffic according to control plane logic.
+
 ![traditional](https://cdn.networklessons.com/wp-content/uploads/2014/10/xcontrol-vs-data-plane.png.pagespeed.ic.wAd7DuCXqu.webp)
 
 Image source: https://networklessons.com/cisco/ccna-routing-switching-icnd2-200-105/introduction-to-sdn-software-defined-networking/

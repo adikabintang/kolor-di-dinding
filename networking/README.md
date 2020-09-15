@@ -26,3 +26,4 @@ A very good course for a reference: https://moodle.epfl.ch/course/view.php?id=52
 5. [Linux networking](linux_networking.md)
 6. [SNMP](snmp.md)
 7. [SDN intro](sdn.md)
+8. [Intro to data center networking](data_center_networking.md)

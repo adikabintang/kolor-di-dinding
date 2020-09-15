@@ -154,3 +154,20 @@ int fa0/0
 
 Read more about RD and RT here: https://ccieblog.co.uk/mpls/difference-between-the-rd-and-rt
 
+# Appendix
+
+## VRF Lite
+
+Virtual Routing and Forwarding (VRF) is a virtual routing tables. It allows one device to have multiple routing tables. In other words, a VRF is a virtual routing table. It separates the traffic on a router at L3.
+
+![vrf](https://networkdirection.net/wp-content/uploads/RoutingAndSwitching/VRF_1.png)
+
+Image source: [networkdirection.net](https://networkdirection.net/articles/routingandswitching/vrflite/)
+
+Routes in a VRF can overlap with routes in another VRF.
+
+VLAN separates L2 traffic, it's like having a virtual switch for each VLAN. If there is a router connecting one VLAN to another, one VLAN can communicate with another VLAN. This is unwanted because we want a full separation of traffic. Also, in a multitenancy case, the IP address can overlap. VRF helps with these problems because it uses separate routing table.
+
+Networks in a single VRF can communicate with each other. Network in another VRF cannot communicate with each other. So, if VLAN 1 and VLAN 3 reside in a single VRF, they can communicate to each other.
+
+Now what is this VRF Lite? Why it is "lite"? The VRF is used for MPLS VPN. VRF lite is the VRF that is not used for MPLS VPN.

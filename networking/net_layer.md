@@ -61,10 +61,10 @@ Sources:
 - http://cisco.num.edu.mn/CCNA_R&S1/course/module5/5.1.3.5/5.1.3.5.html#:~:text=As%20with%20the%20unicast%20and,%2D00%2D5E%20in%20hexadecimal.
 - https://networklessons.com/multicast/multicast-ip-address-to-mac-address-mapping
 
-Multicast is for sending to *some* members (like a group). IPv4 addresses for multicast are 224.0.0.0 to 239.255.255.255.
+Multicast is for sending to *some* members (group). IPv4 addresses for multicast are 224.0.0.0 to 239.255.255.255.
 
 The receivers form a multicast group. The protocol to join the group is called Internet Group Management Protocol (IGMP).
 
 The MAC addresses that associates with the IP multicast are 01:00:5e:00:00:00–01:00:5e:7f:ff:ff (remember, broadcast is FF:FF:FF:FF:FF:FF, and multicast does not use this). If the switch understands multicast, when receiving a packet with special multicast, the switch will forward to the group. If the router does not understand multicast, it will flood to all interface, and the NIC of the destination that will filter it (if the destination is not the member).
 
-The IP-MAC translation in IP multicast is done locally. It involves converting a reserved multicast IP address to the reserved MAC address for multicast. The NIC is then configured with this MAC. Due to the bit difference, some multicast IP address can be associated with a single MAC address. See [networklessons.com](https://networklessons.com/multicast/multicast-ip-address-to-mac-address-mapping) for details.
+The IP-MAC translation in IP multicast is done locally. It involves converting a reserved multicast IP address to the reserved MAC address for multicast. The NIC is then configured with this MAC. Due to the bit difference, some multicast IP addresses can be associated with a single MAC address. See [networklessons.com](https://networklessons.com/multicast/multicast-ip-address-to-mac-address-mapping) for details.

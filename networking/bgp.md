@@ -235,3 +235,18 @@ TODO: BGP path hunting.
 # Security: BGP hijacking
 
 TODO
+
+# MP-BGP
+
+Multiprotocol BGP (MP-BGP) is an extension to the BGP that can bring multiple address family in its operation at the same time.
+
+What is *address family*?
+
+Address family is an address type, such as:
+
+- IPv4
+- IPv6
+- L2VPN: L2 VPN information, such as EVPN or VPLS
+- VPNv4 and VPNv6: L3 VPN information, such as MPLS VPN
+
+So, MP-BGP can carry, for example, IPv4 and IPv6 at the same time, or IPv4 and L2VPN at the same time.
