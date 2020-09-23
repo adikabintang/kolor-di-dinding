@@ -17,7 +17,7 @@ In order to make different types of pizza, we can have different constructors (f
 
 The idea of the builder pattern is to have "builders" who build the object for the client code. The constructor of the product class (in this case, the pizza), can be only 1. The builder builds it by calling the setters.
 
-The client code can build the object by talking to the concrete builders. Alternatively, there can be a director (like a consultant), the client talks to the director, the director talks to the builders. 
+The client code can build the object by talking to the concrete builders. Alternatively, there can be a director (like a consultant), the client talks to the director, the director talks to the builders.
 
 Credits:
 
