@@ -1,3 +1,30 @@
+# Link state vs distance vector routing
+
+Credits:
+
+- [Cloud Native Data Center Networking](https://cumulusnetworks.com/lp/cloud-native-data-center-networking/)
+
+- Link state: best path counts the links' capabilities
+- Distance vector: best path based on number of hops
+- In link state, a roter gossips about everybody in the network to its neighbors
+- In distance vector, a router gossips about it's neighbors with everybody else
+
+## Link state is more chatty than distance vector when there is a network change
+
+![route](../images/router_demo_ospf.png)
+
+Let's say the cost of the links are all the same. Then, in both link state and distance vector, R7 knows 2 ways to reach 10.1.1.0/24 via R5 and R6. Then, the link between R1 and R4 is down, and R4 will advertise this condition to all its' neighbors. Optimally, this should not affect how R7 sends to 10.1.1.0/24 because it still can go through R5 or R6.
+
+In the link state, R6, after receiving the LSA from R4, will advertise the LSA to R7. R7 will recompute the shortest path and eventually realize it still can go through R6. What a waste.
+
+In the distance vector, R6 will not bother telling it to R7 because it builds the table first, and if there is no need to forward the table, it will not send the advertisement.
+
+## Link state converges faster
+
+In the link state, the advertisement is flooded without modification by other routers. So, the other routers in the network will quickly know the network changes and states.
+
+In the distance vector, a router cannot forward updates without calculating the distance first. In addition, there is a hold-down timer to avoid count-to-infinity problem. So, the delay is larger in the distance vector for the network to converge.
+
 # OSPF
 
 Sources:

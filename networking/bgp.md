@@ -249,4 +249,23 @@ Address family is an address type, such as:
 - L2VPN: L2 VPN information, such as EVPN or VPLS
 - VPNv4 and VPNv6: L3 VPN information, such as MPLS VPN
 
-So, MP-BGP can carry, for example, IPv4 and IPv6 at the same time, or IPv4 and L2VPN at the same time.
+So, MP-BGP can carry, for example, IPv4 and IPv6 at the same time, or IPv4 and L2VPN at the same time. The UPDATE of MP-BGP has a new Network Layer Reachability Information (NLRI) format that has an additional address family.
+
+# Appendix
+
+## RIB and FIB
+
+```
+-------------------------------------
+| Routing protocol on control plane |
+|        -------                    |
+|        | RIB |                    |
+|        -------                    |
+-------------------------------------
+            |
+           RIB manager builds FIB, install in kernel
+            |
+      FIB handle packet forwarding
+```
+
+Routing protocols, like OSPF, BGP, and so on, is used to exchange prefix and other metrics. These are then calculated for the best path and then the routing table is saved into Routing Information Base (RIB). Use `show ip route` to see RIB. RIB is part of the *control plane*. The information from RIB is used to build the Forwarding Information Base (FIB), which is the table that says "the traffic egress towards IP address X should go through interface ethX". Router forwards packet using FIB. FIB is part of the *forwarding plane*.

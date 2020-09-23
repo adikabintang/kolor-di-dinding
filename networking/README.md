@@ -18,11 +18,11 @@ A very good course for a reference: https://moodle.epfl.ch/course/view.php?id=52
    6. [multi tier load balancers (L3, L4, L7, but let's just put it here)](multi_tier_load_balancer.md)
    7. [ipsec](ipsec.md)
    8. [vrrp](vrrp.md)
+   9. [GRE tunnels](gre.md)
 4. Layer 2
    1. [Switching and VLAN](l2.md)
    2. [ARP](arp.md)
    3. [MPLS](mpls.md)
-   4. [GRE] TODO
 5. [Linux networking](linux_networking.md)
 6. [SNMP](snmp.md)
 7. [SDN intro](sdn.md)
