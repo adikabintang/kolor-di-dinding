@@ -39,7 +39,7 @@ Namespace types:
 
 - mnt namespace: provides root filesystem (think of chroot)
 - pid namespace: process within that cgroup only sees itself and the children
-- network namespace: allows to have its own net stack
+- network namespace: allows to have its own net stack, interfaces, tables, and so on
 - user namespace: allows non-root on host OS to be mapped to the root within the container
 - uts namespace: allows to have different host and domain names
 - ipc: isolate ipc

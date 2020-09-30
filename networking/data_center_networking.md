@@ -39,6 +39,60 @@ This way of AS numbering avoids BGP path hunting. What is BGP path hunting?
 
 BGP path hunting is a tendency of BGP to hunt a path, making it longer and longer, before it converges. Typically this happens after a BGP prefix withdrawal. The main culprit is the 30 seconds MRAI. The AS numbering as the above rule alleviates the BGP path hunting because BGP will not forward advertisement that comes from its' own AS number. Another thing to do to avoid path hunting is to set the MRAI to 0 second. Read more about path hunting on [noction.com](https://www.noction.com/blog/bgp-path-hunting) and [Paul Jakma's blog](https://paul.jakma.org/2020/01/21/bgp-path-hunting/).
 
+### Network Virtualization in a DC
+
+Typically, network virtualization protocols in a DC are:
+
+- VXLAN (most common)
+- VLAN (not really popular because it only supports much smaller number of networks compared to VXLAN)
+- VRF
+
+### Multicast routing in a DC
+
+Application level multicasting is generally avoided because the multicast routing is complex. It is commonly used only of EVPN/VXLAN.
+
+## Connecting DC to an external network/internet
+
+A few points:
+
+- In a cloud native apps, east-west traffic is more crowded than the north-south. So, the bandwidth and the edge router are less powerful than the spines/leaf.
+
+### How a clos topology is connected to the external network/internet
+
+![clos to ext](../images/clos_to_ext.png)
+
+A group of leaves+servers makes a pod. A group of border leaves+border router makes a border pod.
+
+### Routing protocol at the edge
+
+The edge/border router is eBGP peered with the ISP(s) routers. The border leaves have to strip off the privatet ASNs of the internal DC.
+
+### Services at the border pod
+
+Usually firewalls and load balancers. Let's take a deeper look at firewalls as an example.
+
+![border firewall](../images/clos_ext_firewall.png)
+
+The border leaves use 2 VRF, green for the internal network and black for the external network. The firewalls have 2 BGP sessions: one for the black and one for the green. So, the traffic going in from the outside and vice versa must travel hrough the firewall.
+
+### What aboutt hybrid cloud?
+
+Hybrid cloud is a combination of having infrastructure in a real data center as well as in a cloud provider like AWS ([VPC](https://aws.amazon.com/vpc/)). What we usually want to do is to connect these 2 networks. There are 2 ways:
+
+- **VPN**
+
+VPN IPSec. This is simplest, not flexible, slowest, cheapest. Only do this if the data transferred are small. If it's like sending json here and there, probably this is enough. Maybe.
+
+The routing protocol is setup on top of this IPSec. Maybe it uses GRE too so that they can peer with BGP or any other routing protocol (TODO: confirm this by digging some more info).
+
+- **Direct connectivity**
+
+AWS has Direct Connect, Azure has ExpressRoute, GCP has Cloud Interconnect.
+
+It does this via *colocation* or *point-to-point ethernet* or *MPLS VPN*.
+
+The data center and the cloud provider builds a VLAN with 802.1Q. Then, use BGP to peer.
+
 ## Inter-DC
 
 https://sites.google.com/site/amitsciscozone/home/data-center/data-center-interconnect-part-1
