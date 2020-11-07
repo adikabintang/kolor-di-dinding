@@ -3,6 +3,7 @@
 Sources:
 
 - https://en.wikipedia.org/wiki/Multiprotocol_Label_Switching
+- the main video: https://www.youtube.com/watch?v=JHEE6QU3J6M&ab_channel=TeamNANOG
 - https://www.youtube.com/watch?v=MEWIdO40U54
 - https://www.youtube.com/watch?v=U1w-b9GIt0k
 - http://www.gompls.net/2009/08/understanding-mpls-header.html
@@ -19,7 +20,9 @@ Multiprotocol label switching (MPLS) is a routing technique that is based on sho
 Why MPLS is used/advantages of MPLS:
 
 - This can be used as the tunnel between two sites. We can also say that the path between these sites is isolated from the other path in the network.
-- We can influence the packet to chooose a certain path (with traffic engineering), independent of IP routing protocol's best path
+- We can influence the packet to chooose a certain path (with traffic engineering), **independent of IP routing protocol's best path**.
+- Increase resiliency in case of failure (with Fast Reroute (FRR))
+- Build a MPLS core network with cheaper switches. Looking up labels in the FIB is cheaper than looking up IP in FIB. So, less sophisticated ASIC = cheaper.
 
 MPLS operates at the layer between L2 and L3, and often referred to as the L2.5. This is also known as shim header.
 
@@ -38,7 +41,7 @@ How routers know that this packet is MPLS or not? Routers look at the Ethertype 
 
 Take a look at this example:
 
-A packet from the office in city A wants go to to the office in city B (src: 1.1.1.6, dst: 2.2.2.6). The LER will inspect this packet and match the dest IP to the label in the table of Forwarding Equivalence Classes (FEC). Example of the FEC table:
+A packet from the office in city A wants go to the office in city B (src: 1.1.1.6, dst: 2.2.2.6). The LER will inspect this packet and match the dest IP to the label in the table of Forwarding Equivalence Classes (FEC). Example of the FEC table:
 
 ```
 | IP addr    | label |
@@ -64,15 +67,15 @@ The path that the MPLS packet goes through is called the **Label Switched Path (
 
 ### MPLS LDP
 
-Sources: 
+Sources:
 
 - https://networklessons.com/mpls/mpls-ldp-label-distribution-protocol
 - https://networkengineering.stackexchange.com/questions/38588/rib-vs-fib-differences
 - http://resources.intenseschool.com/mpls-ldp-lib-and-lfib/
 
-LDP is a protocol for generating and exchanging MPLS labels. LDP is used to build and maintain LSP database, LDP relies on IGP to distribute the labels to neighboring MPLS routers.
+LDP is a protocol for generating and exchanging MPLS labels. LDP is used to build and maintain LSP database, LDP relies on L3 routing protocol (IGP or BGP) to distribute the labels to neighboring MPLS routers. Why? Because each switches must be fully meshed to distribute the labels.
 
-As an analogy, MPLS LDP builds the forwarding table like other routing protocols (OSPF, BGP, RIP, etc) do. 
+As an analogy, MPLS LDP builds the forwarding table like other routing protocols (OSPF, BGP, RIP, etc) do.
 
 Routing protocols, like OSPF, BGP, and so on, is used to exchange prefix and other metrics. These are then calculated for the best path and then the routing table is saved into Routing Information Base (RIB). Use `show ip route` to see RIB. RIB is part of the *control plane*. The information from RIB is used to build the Forwarding Information Base (FIB), which is the table that says "the traffic egress towards IP address X should go through interface ethX". Router forwards packet using FIB. FIB is part of the *forwarding plane*.
 
@@ -95,8 +98,24 @@ A network can use both: LDP for MPLS VPN, RSVP-TE for traffic engineering featur
 
 Image source: https://archive.nanog.org/sites/default/files/tuesday_tutorial_steenbergen_mpls_46.pdf
 
+How roughly RSVP-TE works:
 
-# MPLS VPN
+- Each LSP is assigned a bandwidth value
+- Using [constrained routing](https://en.wikipedia.org/wiki/Constrained_Shortest_Path_First) (routing that excludes path that fails to meet the constraints), RSVP-TE takes the shortest path with enough bandwidth
+- LSB may be deined if there is no enough bandwidth
+
+Wait, how to determine the LSB bandwidth?
+
+- Offline calculation
+- Auto-bandwidth: calculated on the router by periodically measuring the traffic crossing the LSP
+
+How MPLS auto-bandwith works:
+
+- every x second, measure bandwidth over an LSP
+- after several sample, measure the statistics
+- if the change is greater than the threshold, the new bandwidth value is re-signaled across RSVP
+
+# MPLS data transport services: MPLS VPN
 
 Sources:
 
@@ -112,15 +131,18 @@ MPLS VPN is VPN that uses MPLS to operate (not IPSec). 3 types of MPLS VPN: Poin
 
 1. Pseudowire (point-to-point)
 
-Used by SCADA master controller related stuffs.
+Emulated _L2 point-to-point_ circuit delivered over MPLS. Used by SCADA master controller related stuffs.
 
 2. L2 MPLS VPN (VPLS)
 
-Typically used to route traffic between > 2 data center locations. It's like building L2 VLANs between sites. ISP sells this service.
+- Builds an _L2 multipoint_ switching service over MPLS.
+- Can handle [BUM traffic](https://en.wikipedia.org/wiki/Broadcast,_unknown-unicast_and_multicast_traffic#:~:text=BUM%20traffic%20refers%20to%20that,to%20the%20intended%20destination%20only.)
+- Typically used to route traffic between > 2 data center locations. It's like building L2 VLANs between sites.
+- The purpose of VPLS is like EVPN, but EVPN is newer and better
 
-3. L3 MPLS VPN (VPRN)
+1. L3 MPLS VPN (VPRN)
 
-L3 MPLS VPN  uses Virtual Routing & Forwarding (VRF) to segment routing tables for each customer utilizing the service. The VRF is only on the PE router, not on the P. With VRF, the router has multiple instance of routing tables. It's the L3 equivalent to the L2 VLAN (see previous explanation about L2 MPLS VPN).
+An IP based VPN. L3 MPLS VPN uses Virtual Routing & Forwarding (VRF) to segment routing tables for each customer utilizing the service. The VRF is only on the PE router, not on the P. With VRF, the router has multiple instance of routing tables. It's the L3 equivalent to the L2 VLAN (see previous explanation about L2 MPLS VPN).
 
 Since two customers of the L3 MPLS VPN may have the same IP address spaces the PE router may get confused when routing the packet. Example:
 
@@ -154,9 +176,17 @@ int fa0/0
 
 Read more about RD and RT here: https://ccieblog.co.uk/mpls/difference-between-the-rd-and-rt
 
+# MPLS Fast Reroute (FRR)
+
+- Improves convergence during a failure by pre-calculating backup paths for potential link/node failures
+- So, the next best path is calculated and stored in the router's FIB
+- Link and node failures can be protedted
+- 2 ways to provide LSP protection:
+  - One-to-one protecion (detour)
+  - Many-to-one protection (facility)
+
 # Appendix
 
 ## Leaking route with MP-BGP
 
 Source: https://networkdirection.net/articles/routingandswitching/mp-bgp/leakingrouteswithmp-bgp/
-
