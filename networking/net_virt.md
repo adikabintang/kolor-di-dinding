@@ -116,13 +116,16 @@ The process:
 
 #### Control plane learning: EVPN
 
-This technique is like what routing protocols do: learn the route beforehand.
+This technique is like what routing protocols do: learn the route beforehand. In other words, EVPN is the control plane for VXLAN.
 
-- Leaf switches are VTEPs
+- Leaf switches are VTEPs (most common)
+  - Amazon and Microsoft make the host endpoints VTEPs, though
 - All switches in the VXLAN topology runs BGP (leaf and spine switches)
 - The switches peer with each other. Since it uses MP-BGP, the MAC address and the VTEP information is carried in the UPDATE message of the BGP
 
 This has a big advantage: ARP suppresion. The flooding of ARP is minimized because the ARP request from host only reaches ingress VTEP. Ingress VTEP already learns the MAC address and the IP address associated with it through the MP-BGP. The ingress VTEP returns the ARP response.
+
+This is the most preferred way of doing network virtualization in DC: VXLAN with EVPN as the control plane.
 
 ## VRF Lite
 

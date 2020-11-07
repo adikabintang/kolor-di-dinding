@@ -59,13 +59,13 @@ The main steps in OSPF:
 
 - To become neighbors, routers send `hello` packets bringing the router ID. The router ID looks like an IPv4 address, but it's not IPv4 address. It can be configured manually or it will take the loopback address as the ID or the highest up IP address if no loopback is set.
   - `hello` message is used to discover neighboring routers and detect failures.
-- Select Designated Router (DR) and Backup DR (BDR). If there is an event from any router, by default, every router that receives the advertisement will broadcast the received advertisement. If there is DR, only DR will re-advertise it, preventing routers from flooding the network.
+- Select a Designated Router (DR) and Backup DR (BDR). If there is an event from any router, by default, every router that receives the advertisement will broadcast the received advertisement. If there is a DR, only the DR will re-advertise it, preventing routers from flooding the network.
 - When two routers become neighbhors, they *synchronize* their LSDB.
 
 **2. Exhange LSDB info:**
 
 - Router A and B exchange Database Description (DBD), containing what network it has on the LSDB. For example, Router B has info (link state/bandwith data) about network 192.168.1.0/24 that router A does not know. Then, the router A will send a Link State Request (LSR) to ask for the link info about that network.
-- Router B will send the information in Link State Update (LSU)
+- Router B will send the information in a Link State Update (LSU)
 - Router A will send an ack in a Link State Acknowledgement (LSAck)
 
 **LSDB and LSA**
@@ -77,7 +77,7 @@ The main steps in OSPF:
 
 **3. Calculate best path:**
 
-Performed on routers independently, based on the same LSDB among all routers. OSPF uses Dijkstra algorithm to calculate the best path.
+Caculating best paths is performed by routers independently, based on the same LSDB among all routers. OSPF uses Dijkstra algorithm to calculate the best path.
 
 ```
 cost = reference bandwidth / interface bandwidth

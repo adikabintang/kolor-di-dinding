@@ -29,16 +29,6 @@ L3 switch in a DC has processors and switching silicon (ASIC). The packet forwar
 
 Topology: spine-leaf (or clos). The above image is only one example of scaling clos topology with super spines. See the [Cloud Native Data Center Networking](https://cumulusnetworks.com/lp/cloud-native-data-center-networking/) book for more info.
 
-The best practice is to use BGP with MRAI set to 0 inside the data center with this AS numbering scheme:
-
-- All leaves has different ASN
-- Spines within the same pod have the same ASN, but different ASN for different pod
-- Super spines have the same ASN
-
-This way of AS numbering avoids BGP path hunting. What is BGP path hunting?
-
-BGP path hunting is a tendency of BGP to hunt a path, making it longer and longer, before it converges. Typically this happens after a BGP prefix withdrawal. The main culprit is the 30 seconds MRAI. The AS numbering as the above rule alleviates the BGP path hunting because BGP will not forward advertisement that comes from its' own AS number. Another thing to do to avoid path hunting is to set the MRAI to 0 second. Read more about path hunting on [noction.com](https://www.noction.com/blog/bgp-path-hunting) and [Paul Jakma's blog](https://paul.jakma.org/2020/01/21/bgp-path-hunting/).
-
 ### Network Virtualization in a DC
 
 Typically, network virtualization protocols in a DC are:
@@ -75,7 +65,7 @@ Usually firewalls and load balancers. Let's take a deeper look at firewalls as a
 
 The border leaves use 2 VRF, green for the internal network and black for the external network. The firewalls have 2 BGP sessions: one for the black and one for the green. So, the traffic going in from the outside and vice versa must travel hrough the firewall.
 
-### What aboutt hybrid cloud?
+### What about hybrid cloud?
 
 Hybrid cloud is a combination of having infrastructure in a real data center as well as in a cloud provider like AWS ([VPC](https://aws.amazon.com/vpc/)). What we usually want to do is to connect these 2 networks. There are 2 ways:
 
@@ -93,6 +83,26 @@ It does this via *colocation* or *point-to-point ethernet* or *MPLS VPN*.
 
 The data center and the cloud provider builds a VLAN with 802.1Q. Then, use BGP to peer.
 
+### Network automation
+
+- Ansible is one of the most popular tools
+- [Unnumbered interface](https://www.cisco.com/c/en/us/support/docs/ip/hot-standby-router-protocol-hsrp/13786-20.html) makes network automation easier
+- [Vagrant](vagrantup.com) is often used for network testing before deploying to the real devices
+
+### Network observability
+
+Network observability is not only about monitoring. It consists of:
+
+- Telemetry: how the data is collected
+- Storage: how the data is stored
+- Monitoring
+- Alerting
+- Data analysis
+
+SNMP is one of the protocols (and framework) for monitoring network devices. But, it's not the popular thing nowadays.
+
+Nowadays, network operators rely on the syslog produced by the network devices. ELK is commonly used for the ingestion, storing, and monitoring.
+
 ## Inter-DC
 
 https://sites.google.com/site/amitsciscozone/home/data-center/data-center-interconnect-part-1
@@ -108,3 +118,36 @@ Just a note:
 - MPLS separates route in L2.5
 - GRE in L3
 - VRF just builds a virtual table inside a router
+
+# BGP in the data center
+
+- All leaves has different ASN
+- Spines within the same pod have the same ASN, but different ASN for different pod
+- Super spines have the same ASN
+
+This way of AS numbering avoids BGP path hunting.
+
+![asn_dc](../images/asn_scheme.png)
+
+Some other considerations/knobs for BGP inside the DC:
+
+1. To enable ECMP, BGP path must have the same AS_PATH and the same AS_PATH length. Make it only conside AS_PATH length by `bestpath as-path multipath-relax` so that it will not consider the ASes in the AS_PATH, but rely on the length of the path only.
+2. Timers:
+   1. MRAI = 0 sec
+   2. Keepalive timer = 3 seconds
+   3. hold = 3 * keepalive
+   4. Connect = 10 sec
+
+## Deploying BGP in DC
+
+- Peer group
+- Routing policy (and route maps)
+- BGP unnumbered
+
+## BGP and upgrading switches
+
+We need to do it gracefully, which means drain the traffic first before upgrading. Some of the ways in BGP:
+
+1. AS_PATH prepend: prepend the AS to the path so that the route for that router is not chosen
+2. GRACEFUL_SHUTDOWN Community: use BGP community GRACEFUL_SHUTDOWN to lower the LOCAL_PREF and making the route opted out
+3. Max-MED: changing MED attribute (less preferred)

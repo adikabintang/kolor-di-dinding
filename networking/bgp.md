@@ -46,17 +46,17 @@ Sources:
    1. OPEN
    2. NOTIFICATION
    3. KEEPALIVE
-   4. UPDATE: contains route modifications, additions, withdrawals of prefixes (prefix = Network Layer Reachability Information (NLRI)). Attributes are sent here.
+   4. UPDATE: contains route modifications, additions, withdrawals of prefixes (advertised route prefix = Network Layer Reachability Information (NLRI)). Attributes are sent here. See BGP update message format on [tcpipguide.com](http://www.tcpipguide.com/free/t_BGPRouteInformationExchangeUpdateMessages-2.htm).
 3. A route is made of:
    1. destination
    2. AS path
-   3. Attributes: BGP selects the best path based on attributes. More on this later.
-      1. Well-known attribute: 
+   3. Attributes: BGP advertisement contains "post-it" notes, which we refer to as BGP attributes. BGP selects the best path based on attributes. More on this later.
+      1. Well-known attributes:
          1. NEXT_HOP, ORIGIN, AS-PATH
-      2. Well-known discretionary: 
+      2. Well-known discretionary attributes:
          1. LOCAL_PREF: used inside an AS to select the best AS path
-      3. Optional transitive: AGGREGATOR
-      4. Optional nontransitive: WEIGHT
+      3. Optional transitive attribute: AGGREGATOR
+      4. Optional nontransitive attribute: WEIGHT
 4. BGP routers keep the BGP information (routes + attributes) in a data structure named Routing Information Base (RIB).
    1. Adj-RIBs-In: store the BGP routing information received from peers
    2. Local RIB: after applying policies and decision process, the routing information is kept here
@@ -67,7 +67,6 @@ Sources:
 Model of a BGP router. Image source: Page 19 of https://moodle.epfl.ch/pluginfile.php/2731792/mod_resource/content/1/bgpSols.pdf
 
 See [this](mpls.md#mpls-ldp) too for the relationship between RIB and FIB.
-
 
 ## BGP Attributes
 
@@ -96,7 +95,7 @@ Sources:
 
 BGP community attribute is some extra value that can be assigned to specific prefix(es) and advertised to other neighbors.
 
-What is "community" by the way? It actually refers to a group of prefixes that should be treated the same way. BGP community attribute is used to mark a set of prefixes that should be treated in a certain same way. For example, providers can use community attribute to apply a common routing policy such as assigning a certain LOCAL_PREF or WEIGHT. To put it simply, BGP community attributes can be used for traffic engineerng and dynamic routing policies.
+What is "community" by the way? It actually refers to a group of prefixes that should be treated the same way. BGP community attribute is used to mark a set of prefixes that should be treated in a certain same way. For example, providers can use community attribute to apply a common routing policy such as assigning a certain LOCAL_PREF or WEIGHT. To put it simply, BGP community attributes can be used for traffic engineering and dynamic routing policies.
 
 4 well known BGP communities:
 
@@ -251,6 +250,8 @@ Address family is an address type, such as:
 
 So, MP-BGP can carry, for example, IPv4 and IPv6 at the same time, or IPv4 and L2VPN at the same time. The UPDATE of MP-BGP has a new Network Layer Reachability Information (NLRI) format that has an additional address family.
 
+See MP-BGP NLRI encoded format on [RFC4760](https://tools.ietf.org/html/rfc4760).
+
 # Appendix
 
 ## RIB and FIB
@@ -269,3 +270,26 @@ So, MP-BGP can carry, for example, IPv4 and IPv6 at the same time, or IPv4 and L
 ```
 
 Routing protocols, like OSPF, BGP, and so on, is used to exchange prefix and other metrics. These are then calculated for the best path and then the routing table is saved into Routing Information Base (RIB). Use `show ip route` to see RIB. RIB is part of the *control plane*. The information from RIB is used to build the Forwarding Information Base (FIB), which is the table that says "the traffic egress towards IP address X should go through interface ethX". Router forwards packet using FIB. FIB is part of the *forwarding plane*.
+
+## What is BGP path hunting?
+
+BGP path hunting is a tendency of BGP to hunt a path, making it longer and longer, before it converges. Typically this happens after a BGP prefix withdrawal. The main culprit is the 30 seconds of MRAI. Read more about path hunting on [noction.com](https://www.noction.com/blog/bgp-path-hunting) and [Paul Jakma's blog](https://paul.jakma.org/2020/01/21/bgp-path-hunting/).
+
+## BGP Unnumbered
+
+Source: https://cumulusnetworks.com/blog/bgp-unnumbered-overview/
+
+Configuring BGP peers require the peers' IPv4 addresses. This can be cumbersome for network automation. BGP unnumbered means it uses unnumbered interfaces (interfaces that don't have IPv4 address assigned). Simply put, when configuring, we don't need to state the IPv4 addresses of the peers.
+
+As a result, after configuring, the next hop of the destination (which can be seen by `show bgp ipv4 unicast`) is the interface name instead of the IPv4 address of the real next hop. When we see the RIB by `show route bgp`, the next hop is the IPv6 interfaces of the peers, which is automatically assiged to each interface.
+
+How roughly this can be achieved:
+
+1. IPv6 link local address is assigned automatically to each interface
+2. The peer knows the IPv6 addresses of each other using IPv6 Router Advertisement Protocol
+3. [RFC 5549](https://tools.ietf.org/html/rfc5549) is used to annouce IPv4 addresses with the IPv6 link local addresses as the next hops
+4. Form the routing table learned via RFC 5549
+
+## Routing policy with route-map
+
+Routing policy is used to accept or reject route advertisements. It's like if-else for accepting adv: like `if the prefix is this one then accept else reject`. Route Map is the implementation of routing policy.
