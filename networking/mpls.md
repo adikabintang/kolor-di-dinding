@@ -15,7 +15,7 @@ Sources:
 - https://networkengineering.stackexchange.com/questions/47425/why-does-mpls-need-an-igp-like-ospf-in-order-to-work
 - https://en.wikipedia.org/wiki/Label_Distribution_Protocol
 
-Multiprotocol label switching (MPLS) is a routing technique that is based on short path labels, not the network addresses. It does not involve complex lookups in a routing table.
+Multiprotocol label switching (MPLS) is a routing technique that is based on short path labels, not the network addresses. It does not involve complex lookups in a routing table. But this also means that traceroute cannot know the router in the path, because traceroutes depends on L3 (ICMP error message).
 
 Why MPLS is used/advantages of MPLS:
 
