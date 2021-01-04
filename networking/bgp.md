@@ -70,7 +70,7 @@ See [this](mpls.md#mpls-ldp) too for the relationship between RIB and FIB.
 
 ## BGP Attributes
 
-Source: https://networklessons.com/bgp/bgp-attributes-and-path-selection
+Source: `https://networklessons.com/bgp/bgp-attributes-and-path-selection
 
 As an analogy, IGP selects the path with the lowest metric, e.g., RIP selects the one with the lowest hop count, or OSPF selects the one with the least cost. BGP selects the path based on the attributes.
 
@@ -92,8 +92,9 @@ Sources:
 
 - https://networklessons.com/bgp/bgp-communities-explained
 - https://www.networkers-online.com/blog/2008/09/understanding-bgp-communities/
+- https://www.noction.com/blog/understanding-bgp-communities
 
-BGP community attribute is some extra value that can be assigned to specific prefix(es) and advertised to other neighbors.
+BGP community attribute is some extra value (32 bit value) that can be assigned to specific prefix(es) and advertised to other neighbors.
 
 What is "community" by the way? It actually refers to a group of prefixes that should be treated the same way. BGP community attribute is used to mark a set of prefixes that should be treated in a certain same way. For example, providers can use community attribute to apply a common routing policy such as assigning a certain LOCAL_PREF or WEIGHT. To put it simply, BGP community attributes can be used for traffic engineering and dynamic routing policies.
 
@@ -103,6 +104,15 @@ What is "community" by the way? It actually refers to a group of prefixes that s
 - no-advertise: don't advertise to any
 - no-export: don't advertise the prefix to any eBGP neighbor
 - local-AS: don't advertise the prefix outside sub-AS (for BGP confederation)
+
+Some well-known, pre-defined communities:
+
+- NO_EXPORT (0xFFFFFF01): tells a router that it should only progapage this BGP route to iBGP peers, not eBGP
+- NO_ADVERTISE (0xFFFFFF02): tells a router that it should not advertise this BGP route
+
+There are also user-defined communities, usually denoted as {AS number}:{id for what to do}. For example, ISP level3 (AS 3356) tags all prefixes it learns in Pittsbugh with community 3356:2040. 
+
+Another example is 3356:70, which tells router to set local preference to 70 for this route. This might be useful if our network is connected to, say, Telia and level3, but we want to make Telia as the main route to the internet and level3 as the backup route. For ongoing traffic, we set local preference of Telia higher. But for incoming traffic, we advertise route with 3356:70 to Level3 router so that the Level3 router set local preference to 70 for our path, and telia still has 100 as the default value. So, incoming traffic will come from Telia.
 
 ## Redistribution of BGP into IGP
 
